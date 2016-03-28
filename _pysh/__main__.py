@@ -271,7 +271,7 @@ command_parsers = parser.add_subparsers(
 )
 
 
-# Install.
+# Install command.
 
 def install(opts):
     config = load_config(opts)
@@ -290,7 +290,7 @@ install_parser.add_argument(
 install_parser.set_defaults(func=install)
 
 
-# Activate.
+# Activate command.
 
 def activate(opts):
     config = load_config(opts)
@@ -306,6 +306,21 @@ Deactivate environment with \'exit\' or [Ctl+D].
 
 activate_parser = command_parsers.add_parser("activate")
 activate_parser.set_defaults(func=activate)
+
+
+# Run command.
+
+def run(opts):
+    shell_local_exec(opts, "{local_command}", local_command=opts.local_command)
+
+run_parser = command_parsers.add_parser("run")
+run_parser.add_argument(
+    nargs="+",
+    dest="local_command",
+    metavar="local-command",
+    help="The local environment shell command to run.",
+)
+run_parser.set_defaults(func=run)
 
 
 # Main method.
