@@ -60,11 +60,13 @@ def dist(opts):
             ))
             with mark_task(opts, "Creating archive {}".format(dist_file)):
                 mkdirp(os.path.join(opts.root_path, opts.dist_dir))
+                dist_file_path = os.path.join(opts.root_path, dist_file)
+                rimraf(dist_file_path)
                 shell(
                     opts,
-                    "cd {build_path} && zip -9 -qq -r {dist_path} './'",
+                    "cd {build_path} && zip -9 -qq -r {dist_file_path} './'",
                     build_path=build_path,
-                    dist_path=os.path.join(opts.root_path, dist_file),
+                    dist_file_path=dist_file_path,
                 )
         finally:
             rimraf(build_path)

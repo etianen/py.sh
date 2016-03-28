@@ -6,8 +6,10 @@ from urllib.request import urlopen
 # Filesystem.
 
 def rimraf(path):
-    if os.path.exists(path):
+    if os.path.isdir(path):
         shutil.rmtree(path)
+    elif os.path.exists(path):
+        os.unlink(path)
 
 
 def mkdirp(path):

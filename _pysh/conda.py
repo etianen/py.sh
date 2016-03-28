@@ -21,7 +21,7 @@ def reset_conda_env(opts, config):
     if opts.offline:
         with mark_task(opts, "Installing {} conda dependencies".format(opts.conda_env)):
             deps = glob.glob(os.path.join(opts.root_path, opts.pysh_dir, CONDA_PACKAGES_DIR, "*.tar.bz2"))
-            shell_local(
+            shell(
                 opts,
                 "conda create --offline --yes --name {conda_env} {deps}",
                 conda_env=opts.conda_env,
