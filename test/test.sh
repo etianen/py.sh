@@ -57,7 +57,7 @@ unzip -qq -o "${ROOT_PATH}/dist/pysh-test-0.1.0-$(uname -s | tr '[:upper:]' '[:l
 # Install the standalone distribution.
 echo "NOTICE: About to perform offline tests in 10 seconds."
 sleep 10
-run-test "${DIST_PATH}" install --offline
+run-test "${DIST_PATH}" --traceback --config-file="${DIST_PATH}/test/package.json" install --offline
 assert-python "${DIST_PATH}"
 assert-dep "${DIST_PATH}" "psycopg2"
 assert-dep "${DIST_PATH}" "django"
