@@ -14,7 +14,6 @@ PYSH_DIR_PATH="${PYSH_ROOT_PATH}/${PYSH_DIR}"
 PYSH_LIB_PATH="${PYSH_DIR_PATH}/${PYSH_LIB_DIR}"
 MINICONDA_DIR_PATH="${PYSH_DIR_PATH}/${PYSH_MINICONDA_DIR}"
 MINICONDA_INSTALLER_PATH="${PYSH_LIB_PATH}/install-miniconda.sh"
-PYSH_HELPERS_URL=${PYSH_HELPERS_URL:="https://github.com/etianen/py.sh/archive/master.tar.gz"}
 PYSH_HELPERS_PATH="${PYSH_LIB_PATH}/pysh-helpers.tar.gz"
 PYSH_HELPERS_INSTALL_PATH=${PYSH_HELPERS_INSTALL_PATH:="${PYSH_HELPERS_PATH}"}
 
@@ -48,7 +47,7 @@ if [[ "${*}" =~ (^| )([^- ][^ ]+) ]]; then
         # Download py.sh helpers.
         if [ ! -f "${PYSH_HELPERS_PATH}" ]; then
             printf "Downloading py.sh helpers... "
-            curl --location --silent "${PYSH_HELPERS_URL}" > "${PYSH_HELPERS_PATH}"
+            curl --location --silent "https://github.com/etianen/py.sh/archive/master.tar.gz" > "${PYSH_HELPERS_PATH}"
             printf "done!\n"
         fi
         # Install Miniconda.
