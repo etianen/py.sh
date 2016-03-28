@@ -2,28 +2,27 @@
     "name": "pysh-test",
     "version": "0.10",
     "pysh": {
-        "version": "3.5",
-        "install": [
-            "./manage.py collectstatic --noinput --link",
-            "./manage.py migrate --noinput",
-            "./manage.py ldap_sync_users",
-            "./manage.py ldap_promote dhall"
-        ],
-        "dependencies": {
-            "conda": {
+        "python": {
+            "version": "3.5"
+        },
+        "conda": {
+            "dependencies": {
                 "psycopg2": "2.6.1"
             },
-            "pip": {
-                "django": "1.9.2"
+            "devDependencies": {
+                "pytest": "2.8.5"
             }
         },
-        "devDependencies": {
-            "conda": {
-                "pytest": "2.8.5"
+        "pip": {
+            "dependencies": {
+                "django": "1.9.2"
             },
-            "pip": {
+            "devDependencies": {
                 "flake8": "2.5.4"
             }
-        }
+        },
+        "install": [
+            "echo foobar"
+        ]
     }
 }
