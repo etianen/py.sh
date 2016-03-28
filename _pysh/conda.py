@@ -56,5 +56,12 @@ def download_conda_deps(opts):
             for dep in deps:
                 download(
                     dep,
-                    os.path.join(opts.root_path, BUILD_DIR, opts.pysh_dir, CONDA_PACKAGES_DIR, posixpath.basename(dep)),
+                    os.path.join(
+                        opts.root_path,
+                        opts.pysh_dir,
+                        BUILD_DIR,
+                        opts.pysh_dir,
+                        CONDA_PACKAGES_DIR,
+                        posixpath.basename(dep),
+                    ),
                 )

@@ -36,6 +36,6 @@ def download_pip_deps(opts, config):
             shell_local(
                 opts,
                 "pip download --dest {dest_dir} {deps}",
-                dest_dir=os.path.join(opts.root_path, BUILD_DIR, opts.pysh_dir, PIP_PACKAGES_DIR),
+                dest_dir=os.path.join(opts.root_path, opts.pysh_dir, BUILD_DIR, opts.pysh_dir, PIP_PACKAGES_DIR),
                 deps=deps,
             )
