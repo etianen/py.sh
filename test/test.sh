@@ -60,9 +60,7 @@ sleep 10
 run-test "${DIST_PATH}" install --offline
 assert-python "${DIST_PATH}"
 assert-dep "${DIST_PATH}" "psycopg2"
-assert-dep "${DIST_PATH}" "pytest"
 assert-dep "${DIST_PATH}" "django"
-assert-dep "${DIST_PATH}" "flake8"
 
 # Test clean.
 run-test "${DIST_PATH}" clean

@@ -1,0 +1,9 @@
+install:
+  - ./py.sh install
+  - ./py.sh run pip install flake8
+script:
+  - ./py.sh run flake8 _pysh
+  - ./test/test.sh
+notifications:
+  on_success: never
+  on_failure: change
