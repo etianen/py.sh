@@ -21,6 +21,7 @@ def install_pip_deps(opts, config):
         with mark_task(opts, "Installing {} pip dependencies".format(opts.conda_env)):
             if opts.offline:
                 shell_local(
+                    opts,
                     "pip install --no-index --find-links {packages_dir} {deps}",
                     packages_dir=os.path.join(opts.root_path, PIP_PACKAGES_DIR),
                     deps=deps,
