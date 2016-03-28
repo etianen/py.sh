@@ -58,6 +58,12 @@ def main(args, environ):
         help="Installs a standalone Python interpreter and all the app dependencies.",
     )
     install_parser.add_argument(
+        "--offline",
+        default=False,
+        action="store_true",
+        help="Install dependencies from a local archive. Implies --production.",
+    )
+    install_parser.add_argument(
         "--production",
         default=False,
         action="store_true",
@@ -74,7 +80,7 @@ def main(args, environ):
         default="dist",
         help="The directory name to write archive files to.",
     )
-    dist_parser.set_defaults(func=dist, production=False, conda_env="build")
+    dist_parser.set_defaults(func=dist, production=False, conda_env="build", offline=False)
     # Activate command.
     activate_parser = command_parsers.add_parser(
         "activate",

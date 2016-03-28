@@ -1,6 +1,10 @@
-from _pysh.config import get_deps
+import os
+from _pysh.config import PACKAGES_DIR, BUILD_DIR, get_deps
 from _pysh.shell import shell_local
 from _pysh.tasks import mark_task
+
+
+PIP_PACKAGES_DIR = os.path.join(PACKAGES_DIR, "pip")
 
 
 def get_pip_deps(opts, config):
@@ -15,4 +19,23 @@ def install_pip_deps(opts, config):
     deps = get_pip_deps(opts, config)
     if deps:
         with mark_task(opts, "Installing {} pip dependencies".format(opts.conda_env)):
-            shell_local(opts, "pip install {deps}", deps=deps)
+            if opts.offline:
+                shell_local(
+                    "pip install --no-index --find-links {packages_dir} {deps}",
+                    packages_dir=os.path.join(opts.root_path, PIP_PACKAGES_DIR),
+                    deps=deps,
+                )
+            else:
+                shell_local(opts, "pip install {deps}", deps=deps)
+
+
+def download_pip_deps(opts, config):
+    deps = get_pip_deps(opts, config)
+    if deps:
+        with mark_task(opts, "Downloading pip dependencies"):
+            shell_local(
+                opts,
+                "pip download --dest {dest_dir} {deps}",
+                dest_dir=os.path.join(opts.root_path, BUILD_DIR, opts.pysh_dir, PIP_PACKAGES_DIR),
+                deps=deps,
+            )

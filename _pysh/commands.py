@@ -1,18 +1,12 @@
 from functools import wraps
 import os
-import posixpath
 import shutil
-from _pysh.conda import delete_conda_env, reset_conda_env, install_conda_deps
+from _pysh.conda import delete_conda_env, reset_conda_env, download_conda_deps
 from _pysh.config import load_config
-from _pysh.pip import get_pip_deps, install_pip_deps
+from _pysh.pip import install_pip_deps, download_pip_deps
 from _pysh.shell import shell, shell_local, shell_local_exec
 from _pysh.tasks import TaskError, mark_task
-from _pysh.utils import rimraf, mkdirp, download
-
-
-PACKAGES_DIR = "packages"
-CONDA_PACKAGES_DIR = os.path.join(PACKAGES_DIR, "conda")
-PIP_PACKAGES_DIR = os.path.join(PACKAGES_DIR, "pip")
+from _pysh.utils import rimraf, mkdirp
 
 
 def prevent_unknown(func):
@@ -28,7 +22,6 @@ def prevent_unknown(func):
 def install(opts):
     config = load_config(opts)
     reset_conda_env(opts, config)
-    install_conda_deps(opts, config)
     install_pip_deps(opts, config)
     # Run install scripts.
     with mark_task(opts, "Running install scripts"):
@@ -41,36 +34,24 @@ def dist(opts):
     config = load_config(opts)
     reset_conda_env(opts, config)
     try:
-        install_conda_deps(opts, config)
         # Create a build environment.
         build_path = os.path.join(opts.root_path, opts.pysh_dir, "build")
         rimraf(build_path)
         mkdirp(build_path)
         try:
-            build_pysh_path = os.path.join(build_path, opts.pysh_dir)
             # Copy source.
             with mark_task(opts, "Copying source"):
                 shell(opts, "git archive HEAD | tar -x -C {build_path}", build_path=build_path)
             # Download offline conda packages.
-            with mark_task(opts, "Downloading conda dependencies"):
-                for dep_url in shell_local(opts, "conda list --explicit").decode().splitlines():
-                    if not dep_url.startswith("#") and not dep_url.startswith("@"):
-                        download(
-                            dep_url,
-                            os.path.join(build_pysh_path, CONDA_PACKAGES_DIR, posixpath.basename(dep_url)),
-                        )
+            download_conda_deps(opts)
             # Download offline pip packages.
-            with mark_task(opts, "Downloading pip packages"):
-                shell_local(
-                    opts,
-                    "pip download --dest {dest_dir} {deps}",
-                    dest_dir=os.path.join(build_pysh_path, PIP_PACKAGES_DIR),
-                    deps=get_pip_deps(opts, config),
-                )
+            download_pip_deps(opts, config)
             # Copy libs.
-            build_lib_dir = os.path.join(build_pysh_path, opts.lib_dir)
             with mark_task(opts, "Copying libs"):
-                shutil.copytree(os.path.join(opts.root_path, opts.pysh_dir, opts.lib_dir), build_lib_dir)
+                shutil.copytree(
+                    os.path.join(opts.root_path, opts.pysh_dir, opts.lib_dir),
+                    os.path.join(build_path, opts.pysh_dir, opts.lib_dir),
+                )
             # Compress the build.
             dist_file = os.path.join(opts.dist_dir, "{name}-{version}-{os_name}-amd64.zip".format(
                 name=config.get("name", os.path.basename(opts.root_path)),

@@ -4,6 +4,10 @@ import os
 from _pysh.tasks import TaskError, TaskWarning, mark_task
 
 
+PACKAGES_DIR = "packages"
+BUILD_DIR = "build"
+
+
 class Config:
 
     def __init__(self, value, path):
@@ -44,5 +48,5 @@ def get_deps(opts, config, deps_key):
     deps_config = config.get("pysh").get(deps_key)
     return chain(
         deps_config.get("dependencies").items(),
-        () if opts.production else deps_config.get("devDependencies").items(),
+        () if opts.production or opts.offline else deps_config.get("devDependencies").items(),
     )
