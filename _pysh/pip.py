@@ -23,7 +23,7 @@ def install_pip_deps(opts, config):
                 shell_local(
                     opts,
                     "pip install --no-index --find-links {packages_dir} {deps}",
-                    packages_dir=os.path.join(opts.root_path, PIP_PACKAGES_DIR),
+                    packages_dir=os.path.join(opts.root_path, opts.pysh_dir, PIP_PACKAGES_DIR),
                     deps=deps,
                 )
             else:
