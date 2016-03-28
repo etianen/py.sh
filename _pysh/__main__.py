@@ -112,19 +112,20 @@ def create_env():
     return env
 
 
-def shell(command, **kwargs):
-    # Escape the kwargs.
-    quoted_kwargs = {
+def format_shell(command, **kwargs):
+    return command.format(**{
         key: quote(value) if isinstance(value, str) else " ".join(map(quote, value))
         for key, value
         in kwargs.items()
-    }
-    quoted_command = command.format(**quoted_kwargs)
-    # Run the command.
+    })
+
+
+def shell(opts, command, **kwargs):
+    quoted_command = format_shell(command, **kwargs)
     process = subprocess.Popen(
         quoted_command,
         env=create_env(),
-        executable="/bin/bash",
+        executable=opts.shell,
         shell=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -145,34 +146,49 @@ def shell(command, **kwargs):
     return stdout
 
 
-def format_local_shell(opts, command):
-    commands = ["source {} app".format(quote(os.path.join(MINICONDA_BIN_PATH, "activate")))]
+def format_shell_local(opts, command, **kwargs):
+    commands = []
+    # Activate conda environment.
+    commands.append(format_shell(
+        "source {activate_script_path} {conda_env} &> /dev/null",
+        activate_script_path=os.path.join(MINICONDA_BIN_PATH, "activate"),
+        conda_env=opts.conda_env,
+    ))
+    # Activate local env file.
     env_file_path = os.path.join(PYSH_DIR_PATH, opts.env_file)
     if os.path.exists(env_file_path):
-        commands.append("source {}".format(quote(env_file_path)))
-    commands.append(command)
+        commands.append(format_shell("source {env_file_path}", env_file_path=env_file_path))
+    # Run the command.
+    commands.append(format_shell(command, **kwargs))
+    # All done!
     return " && ".join(commands)
 
 
 def shell_local(opts, command, **kwargs):
-    return shell(format_local_shell(opts, command), **kwargs)
+    return shell(opts, format_shell_local(opts, command), **kwargs)
+
+
+def shell_local_exec(opts, command, **kwargs):
+    quoted_command = format_shell_local(opts, command, **kwargs)
+    os.execve(opts.shell, [opts.shell, "-c", quoted_command], create_env())
 
 
 # Conda.
 
-def delete_conda_env(opts, env_name):
-    with mark_task(opts, "Cleaning {} environment".format(env_name)):
-        shell("conda env remove --yes --name {env_name}", env_name=env_name)
+def delete_conda_env(opts):
+    with mark_task(opts, "Cleaning {} environment".format(opts.conda_env)):
+        shell(opts, "conda env remove --yes --name {conda_env}", conda_env=opts.conda_env)
 
 
-def reset_conda_env(opts, config, env_name):
-    delete_conda_env(opts, env_name)
+def reset_conda_env(opts, config):
+    delete_conda_env(opts)
     # Create a new env.
     python_version = config.get("pysh").get("python").get("version", "3")
-    with mark_task(opts, "Installing {} Python {}".format(env_name, python_version)):
+    with mark_task(opts, "Installing {} Python {}".format(opts.conda_env, python_version)):
         shell(
-            "conda create --yes --name {env_name} python={python_version}",
-            env_name=env_name,
+            opts,
+            "conda create --yes --name {conda_env} python={python_version}",
+            conda_env=opts.conda_env,
             python_version=python_version,
         )
 
@@ -185,27 +201,27 @@ def get_dependencies(opts, config, deps_key):
     )
 
 
-def install_conda_deps(opts, config, env_name):
+def install_conda_deps(opts, config):
     deps = [
         "{}={}".format(*dep)
         for dep
         in get_dependencies(opts, config, "conda")
     ]
     if deps:
-        with mark_task(opts, "Installing {} conda dependencies".format(env_name)):
+        with mark_task(opts, "Installing {} conda dependencies".format(opts.conda_env)):
             shell_local(opts, "conda install --yes {deps}", deps=deps)
 
 
 # Pip.
 
-def install_pip_deps(opts, config, env_name):
+def install_pip_deps(opts, config):
     deps = [
         "{}=={}".format(*dep)
         for dep
         in get_dependencies(opts, config, "pip")
     ]
     if deps:
-        with mark_task(opts, "Installing {} pip dependencies".format(env_name)):
+        with mark_task(opts, "Installing {} pip dependencies".format(opts.conda_env)):
             shell_local(opts, "pip install {deps}", deps=deps)
 
 
@@ -224,6 +240,11 @@ parser = argparse.ArgumentParser(
     description="Install and manage a standalone Python interpreter and environment.",
 )
 parser.add_argument(
+    "--conda-env",
+    default="app",
+    help="The name of the conda environment to install the app into."
+)
+parser.add_argument(
     "--config-file",
     default="package.json",
     help="Path to a JSON config file.",
@@ -232,6 +253,11 @@ parser.add_argument(
     "--env-file",
     default=".env",
     help="Path to a .env file, to be sourced before running any commands.",
+)
+parser.add_argument(
+    "--shell",
+    default="/bin/bash",
+    help="The shell to use to run scripts in this environment.",
 )
 parser.add_argument(
     "--traceback",
@@ -249,11 +275,10 @@ command_parsers = parser.add_subparsers(
 
 def install(opts):
     config = load_config(opts)
-    reset_conda_env(opts, config, "app")
-    install_conda_deps(opts, config, "app")
-    install_pip_deps(opts, config, "app")
+    reset_conda_env(opts, config)
+    install_conda_deps(opts, config)
+    install_pip_deps(opts, config)
     run_install_scripts(opts, config)
-
 
 install_parser = command_parsers.add_parser("install")
 install_parser.add_argument(
@@ -263,6 +288,24 @@ install_parser.add_argument(
     help="Don't install development dependencies.",
 )
 install_parser.set_defaults(func=install)
+
+
+# Activate.
+
+def activate(opts):
+    config = load_config(opts)
+    package_name = config.get("name", os.path.basename(PYSH_ROOT_PATH))
+    with mark_task(opts, "Activating {} environment".format(opts.conda_env)):
+        shell_local_exec(
+            opts,
+            """printf "done!
+Deactivate environment with \'exit\' or [Ctl+D].
+" && export PS1="({package_name}) \\h:\\W \\u\\$ " && bash""",
+            package_name=package_name,
+        )
+
+activate_parser = command_parsers.add_parser("activate")
+activate_parser.set_defaults(func=activate)
 
 
 # Main method.
