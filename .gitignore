@@ -68,5 +68,8 @@ target/
 # pyenv
 .python-version
 
+# dotenv
+/.env
+
 # py.sh
 /.pysh

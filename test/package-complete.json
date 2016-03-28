@@ -1,6 +1,6 @@
 {
     "name": "pysh-test",
-    "version": "0.10",
+    "version": "0.1.0",
     "pysh": {
         "python": {
             "version": "3.5"

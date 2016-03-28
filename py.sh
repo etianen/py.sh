@@ -1,4 +1,29 @@
 #!/bin/bash
+
+# LICENSE
+#
+# The MIT License (MIT)
+#
+# Copyright (c) 2016 Dave Hall
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
 set -e -o pipefail
 shopt -s nullglob
 
@@ -7,12 +32,14 @@ export PYSH_ROOT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export PYSH_SCRIPT=`basename "${BASH_SOURCE[0]}"`
 export PYSH_DIR=".pysh"
 export PYSH_MINICONDA_DIR="miniconda"
+export PYSH_LIB_DIR="lib"
 
 PYSH_DIR_PATH="${PYSH_ROOT_PATH}/${PYSH_DIR}"
+PYSH_LIB_PATH="${PYSH_DIR_PATH}/${PYSH_LIB_DIR}"
 MINICONDA_DIR_PATH="${PYSH_DIR_PATH}/${PYSH_MINICONDA_DIR}"
-MINICONDA_INSTALLER_PATH="${PYSH_DIR_PATH}/install-miniconda.sh"
+MINICONDA_INSTALLER_PATH="${PYSH_LIB_PATH}/install-miniconda.sh"
 PYSH_HELPERS_URL=${PYSH_HELPERS_URL:="https://github.com/etianen/py.sh/archive/master.tar.gz"}
-PYSH_HELPERS_PATH="${PYSH_DIR_PATH}/pysh-helpers.tar.gz"
+PYSH_HELPERS_PATH="${PYSH_LIB_PATH}/pysh-helpers.tar.gz"
 PYSH_HELPERS_INSTALL_PATH=${PYSH_HELPERS_INSTALL_PATH:="${PYSH_HELPERS_PATH}"}
 
 if [ "${PYSH_OS_NAME}" = "darwin" ]; then
@@ -28,17 +55,17 @@ run-silent() {
     fi
 }
 
-case "${1}" in
-    clean)
+if [[ "${*}" =~ (^| )([a-z]+) ]]; then
+    if [ "${BASH_REMATCH[2]}" == "clean" ]; then
         printf "Cleaning... "
         rm -rf "${PYSH_ROOT_PATH}/${PYSH_DIR}"
         printf "done!\n"
-        ;;
-    install)
+        exit 0
+    elif [ "${BASH_REMATCH[2]}" == "install" ]; then
         # Download Miniconda.
         if [ ! -f "${MINICONDA_INSTALLER_PATH}" ]; then
             printf "Downloading Miniconda... "
-            mkdir -p "${PYSH_DIR_PATH}"
+            mkdir -p "${PYSH_LIB_PATH}"
             curl --location --silent "${MINICONDA_INSTALLER_URL}" > "${MINICONDA_INSTALLER_PATH}"
             printf "done!\n"
         fi
@@ -58,13 +85,12 @@ case "${1}" in
             run-silent "${MINICONDA_DIR_PATH}/bin/pip" install --no-index --upgrade "${PYSH_HELPERS_INSTALL_PATH}"
             printf "done!\n"
         fi
-        ;;
-    *)
-        if [ ! -d "${MINICONDA_DIR_PATH}" ]; then
-            printf "ERROR!\nRun ./${PYSH_SCRIPT} install before attempting other commands.\n"
-            exit 1
-        fi
-        ;;
-esac
+    fi
+fi
+
+if [ ! -d "${MINICONDA_DIR_PATH}" ]; then
+    printf "ERROR!\nRun ./${PYSH_SCRIPT} install before running other commands.\n"
+    exit 1
+fi
 
 exec "${MINICONDA_DIR_PATH}/bin/python" -m _pysh "${@}"
