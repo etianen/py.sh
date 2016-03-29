@@ -97,7 +97,7 @@ dist_parser.add_argument(
     help="The directory name to write archive files to. Defaults to 'dist'.",
 )
 
-dist_parser.set_defaults(func=dist, production=False, conda_env="build", offline=False)
+dist_parser.set_defaults(func=dist, production=True, conda_env="build", offline=False)
 
 
 # Activate command.
