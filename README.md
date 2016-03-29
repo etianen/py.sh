@@ -149,7 +149,7 @@ cd your_project
 ./py.sh install --offline
 ```
 
-**Important:** Offline installers work best if all binary dependencies (e.g. [numpy](http://www.numpy.org/), [scipy](http://www.scipy.org/)) are installed from [Anaconda Cloud](https://anaconda.org). Otherwise, large binary dependencies can take an extremely long time to build during installation.
+**Note:** Offline installers work best if all binary dependencies (e.g. [numpy](http://www.numpy.org/), [scipy](http://www.scipy.org/)) are obtained from [Anaconda Cloud](https://anaconda.org). Otherwise, large binary dependencies can take an extremely long time to compile during installation.
 
 
 ## FAQ
