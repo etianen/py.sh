@@ -156,7 +156,7 @@ cd your_project
 
 ### Q: Why is this useful?
 
-These things are otherwise really hard to do:
+These things are otherwise tricky to do:
 
 - Run a modern Python interpreter on an outdated version of Linux.
 - Produce offline installers for a Python project.
