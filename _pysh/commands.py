@@ -58,12 +58,6 @@ def dist(opts):
                     opts.lib_path,
                     os.path.join(build_path, opts.work_dir, opts.lib_dir),
                 )
-            # Copy helpers.
-            with mark_task(opts, "Copying helpers"):
-                shutil.copytree(
-                    opts.helpers_path,
-                    os.path.join(build_path, opts.work_dir, opts.helpers_dir),
-                )
             # Compress the build.
             dist_file = os.path.join(opts.dist_dir, "{name}-{version}-{os_name}-amd64.zip".format(
                 name=config.get("name", os.path.basename(opts.root_path)),
