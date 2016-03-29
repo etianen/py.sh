@@ -40,7 +40,7 @@ A small `py.sh` script is added to the root of your Python project. This is used
     ./py.sh install
     ```
 
-4.  Add the hidden `.pysh` directory to your `.gitignore` file.
+4.  Add the newly-created `.pysh` directory to your `.gitignore` file.
 
 **Note:** Step 1 actually generates a custom `py.sh` script, locked to the latest version of the py.sh helper libraries on GitHub. If you ever need to upgrade py.sh, simply follow these steps again.
 
