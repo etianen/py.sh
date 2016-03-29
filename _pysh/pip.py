@@ -1,5 +1,6 @@
 import os
-from _pysh.config import PACKAGES_DIR, BUILD_DIR, get_deps
+from _pysh.config import get_deps
+from _pysh.constants import PACKAGES_DIR, BUILD_DIR
 from _pysh.shell import shell_local
 from _pysh.tasks import mark_task
 
@@ -23,7 +24,7 @@ def install_pip_deps(opts, config):
                 shell_local(
                     opts,
                     "pip install --no-index --find-links {packages_dir} {deps}",
-                    packages_dir=os.path.join(opts.root_path, opts.pysh_dir, PIP_PACKAGES_DIR),
+                    packages_dir=os.path.join(opts.work_path, PIP_PACKAGES_DIR),
                     deps=deps,
                 )
             else:
@@ -37,6 +38,6 @@ def download_pip_deps(opts, config):
             shell_local(
                 opts,
                 "pip download --dest {dest_dir} {deps}",
-                dest_dir=os.path.join(opts.root_path, opts.pysh_dir, BUILD_DIR, opts.pysh_dir, PIP_PACKAGES_DIR),
+                dest_dir=os.path.join(opts.work_path, BUILD_DIR, opts.work_dir, PIP_PACKAGES_DIR),
                 deps=deps,
             )

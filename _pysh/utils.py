@@ -19,11 +19,6 @@ def mkdirp(path):
 # Downloads.
 
 def download(url, dest):
-    response = urlopen(url)
     mkdirp(os.path.dirname(dest))
-    with open(dest, "wb") as handle:
-        while True:
-            chunk = response.read(8192)
-            if not chunk:
-                break
-            handle.write(chunk)
+    with urlopen(url) as src_handle, open(dest, "wb") as dst_handle:
+        shutil.copyfileobj(src_handle, dst_handle)

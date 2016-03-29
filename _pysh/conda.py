@@ -1,7 +1,8 @@
 import glob
 import os
 import posixpath
-from _pysh.config import PACKAGES_DIR, BUILD_DIR, get_deps
+from _pysh.config import get_deps
+from _pysh.constants import PACKAGES_DIR, BUILD_DIR
 from _pysh.shell import shell, shell_local
 from _pysh.tasks import mark_task
 from _pysh.utils import download
@@ -20,7 +21,7 @@ def reset_conda_env(opts, config):
     # Create a new env.
     if opts.offline:
         with mark_task(opts, "Installing {} conda dependencies".format(opts.conda_env)):
-            deps = glob.glob(os.path.join(opts.root_path, opts.pysh_dir, CONDA_PACKAGES_DIR, "*.tar.bz2"))
+            deps = glob.glob(os.path.join(opts.work_path, CONDA_PACKAGES_DIR, "*.tar.bz2"))
             shell(
                 opts,
                 "conda create --offline --yes --name {conda_env} {deps}",
@@ -56,12 +57,5 @@ def download_conda_deps(opts):
             for dep in deps:
                 download(
                     dep,
-                    os.path.join(
-                        opts.root_path,
-                        opts.pysh_dir,
-                        BUILD_DIR,
-                        opts.pysh_dir,
-                        CONDA_PACKAGES_DIR,
-                        posixpath.basename(dep),
-                    ),
+                    os.path.join(opts.work_path, BUILD_DIR, opts.work_dir, CONDA_PACKAGES_DIR, posixpath.basename(dep)),
                 )

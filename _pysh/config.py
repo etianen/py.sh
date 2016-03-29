@@ -4,10 +4,6 @@ import os
 from _pysh.tasks import TaskError, TaskWarning, mark_task
 
 
-PACKAGES_DIR = "packages"
-BUILD_DIR = "build"
-
-
 class Config:
 
     def __init__(self, value, path):

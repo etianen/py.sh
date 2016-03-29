@@ -2,15 +2,20 @@ import os
 import shlex
 import signal
 import subprocess
+from _pysh.constants import CONFIG_PREFIX
 from _pysh.tasks import TaskError
 
 
 def create_env(opts):
-    env = os.environ.copy()
-    env["PATH"] = "{}:{}".format(
-        os.path.join(opts.root_path, opts.pysh_dir, opts.miniconda_dir, "bin"),
-        os.environ.get("PATH", ""),
-    )
+    # Strip out py.sh config variables.
+    env = {
+        key: value
+        for key, value
+        in os.environ.items()
+        if not key.startswith(CONFIG_PREFIX)
+    }
+    # Add the miniconda bin dir to the path.
+    env["PATH"] = "{}:{}".format(opts.miniconda_bin_path, os.environ.get("PATH", ""))
     return env
 
 
@@ -53,7 +58,7 @@ def format_shell_local(opts, command, **kwargs):
     # Activate conda environment.
     commands.append(format_shell(
         "source {activate_script_path} {conda_env} &> /dev/null",
-        activate_script_path=os.path.join(opts.root_path, opts.pysh_dir, opts.miniconda_dir, "bin", "activate"),
+        activate_script_path=os.path.join(opts.miniconda_bin_path, "activate"),
         conda_env=opts.conda_env,
     ))
     # Activate local env file.
