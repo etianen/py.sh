@@ -15,7 +15,7 @@ Install and manage a standalone Python interpreter and dependencies.
 - Supports a large number of precompiled binary dependencies (e.g. [numpy](http://www.numpy.org/), [scipy](http://www.scipy.org/)) from [Anaconda Cloud](https://anaconda.org).
 
 
-# How it works
+## How it works
 
 A small `py.sh` script is added to the root of your Python project. This is used to bootstrap a standalone Python interpreter in a hidden `.pysh` directory.
 
@@ -179,7 +179,7 @@ Probably, but I've never heard of XXX, or it didn't support all the features I w
 
 ### Q: Haven't you just reinvented virtualenv?
 
-Not really. virtualenv is useful for managing a standalone bunch of PyPy dependencies. It doesnt help with installing Python interpreters not included in your operating system, and large binary dependencies can be a pain to install.
+Not really. virtualenv is useful for managing a standalone bunch of PyPy dependencies. It doesnt help with installing Python interpreters not included in your operating system, and large binary dependencies can still be a pain to install.
 
 
 ### Q: Haven't you just reinvented pyenv?
