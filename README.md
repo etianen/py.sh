@@ -1,6 +1,6 @@
 # py.sh
 
-Shell script to install and manage a standalone Python interpreter and environment.
+Install and manage a standalone Python interpreter and dependencies.
 
 **Note:** This project makes use of [Anaconda](http://continuum.io/anaconda), a Python distribution by [Continuum Analytics](https://www.continuum.io/). It is expected that the [Anaconda End User License Agreement](https://docs.continuum.io/anaconda/eula) is agreed upon.
 
@@ -9,7 +9,7 @@ Shell script to install and manage a standalone Python interpreter and environme
 
 - Create per-project Python installations.
 - Configure [PyPi](https://pypi.python.org/pypi) and [Anaconda Cloud](https://anaconda.org) dependencies in a single `package.json` file.
-- Create a standalone archive of your entire project for offline installation on another machine.
+- Create a standalone archive for offline installation on another machine.
 - Supports a large number of 64bit Linux or OSX platforms.
 - Supports a large number of [Python versions](https://anaconda.org/anaconda/python/files).
 - Supports a large number of precompiled binary dependencies (e.g. [numpy](http://www.numpy.org/), [scipy](http://www.scipy.org/)) from [Anaconda Cloud](https://anaconda.org).
