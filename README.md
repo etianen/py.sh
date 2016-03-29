@@ -8,11 +8,11 @@ Shell script to install and manage a standalone Python interpreter and environme
 ## Features
 
 - Create per-project Python installations.
+- Configure PyPi and Anaconda Cloud dependencies in a single `package.json` file.
+- Create a standalone archive of your entire project, including dependencies and Python interpreter, for offline installation on another machine of the same operating system and architecture.
 - Supports a large number of 64bit Linux or OSX platforms.
 - Supports a large number of [Python versions](https://anaconda.org/anaconda/python/files).
 - Supports a large number of precompiled binary dependencies (e.g. [numpy](http://www.numpy.org/), [scipy](http://www.scipy.org/)) from [Anaconda Cloud](https://anaconda.org), as well as any package on [PyPi](https://pypi.python.org/pypi).
-- Configure PyPi and Anaconda Cloud dependencies in a single `package.json` file.
-- Create a standalone archive of your entire project, including dependencies and Python interpreter, for offline installation on another machine of the same operating system and architecture.
 
 
 # How it works.
@@ -138,7 +138,7 @@ It's possible to create a standalone archive of your entire project, including d
 ./py.sh dist
 ```
 
-When complete, you will find a zip archive in the `./dist` folder of your project. Copy this to another machine of the same operating system and architecture, then unzip and install your project.
+You will find a zip archive in the `./dist` folder of your project. Copy this to another machine of the same operating system and architecture, then unzip and install your project.
 
 ``` bash
 unzip your-project-1.0.0.zip -d your_project
