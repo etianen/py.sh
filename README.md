@@ -2,26 +2,27 @@
 
 Shell script to install and manage a standalone Python interpreter and environment.
 
-**Note:** This project makes use of [Anaconda](http://continuum.io/anaconda), a Python distribution by [Continuum Analytics](https://www.continuum.io/). It is expected that the [license terms](https://docs.continuum.io/anaconda/eula) are agreed upon.
+**Note:** This project makes use of [Anaconda](http://continuum.io/anaconda), a Python distribution by [Continuum Analytics](https://www.continuum.io/). It is expected that the [Anaconda End User License Agreement](https://docs.continuum.io/anaconda/eula) is agreed upon.
 
 
 ## Features
 
-- Create per-folder Python installations.
-- Large number of supported 64bit Linux and OSX versions.
-- Large number of [available python versions](https://anaconda.org/anaconda/python/files).
-- Install precompiled binary dependencies (e.g. [numpy](http://www.numpy.org/), [scipy](http://www.scipy.org/)) from [Anaconda](https://anaconda.org).
+- Create per-project Python installations.
+- Supports a large number of 64bit Linux or OSX platforms.
+- Supports a large number of [Python versions](https://anaconda.org/anaconda/python/files).
+- Supports a large number of precompiled binary dependencies (e.g. [numpy](http://www.numpy.org/), [scipy](http://www.scipy.org/)) from [Anaconda Cloud](https://anaconda.org), as well as any package on [PyPi](https://pypi.python.org/pypi).
+- Configure PyPi and Anaconda Cloud dependencies in a single, unified `package.json` file.
+- Create a standalone archive of your entire project, including dependencies and Python interpreter, for offline install on another machine of the same operating system and architecture.
 
 
-## Automatic installation
+# How it works.
 
-py.sh requires that a small
+A small `py.sh` script is added to the root of your Python project. This is used to bootstrap a standalone Python interpreter in a hidden `.pysh` folder.
 
-``` bash
 
-```
+## Installation
 
-**TypeScript:** To take advantage of typings, be sure to set `moduleResolution` to `"node"` in your `tsconfig.json`.
+TODO
 
 
 ## Build status
