@@ -15,7 +15,7 @@ Install and manage a standalone Python interpreter and dependencies.
 - Supports a large number of precompiled binary dependencies (e.g. [numpy](http://www.numpy.org/), [scipy](http://www.scipy.org/)) from [Anaconda Cloud](https://anaconda.org).
 
 
-# How it works.
+# How it works
 
 A small `py.sh` script is added to the root of your Python project. This is used to bootstrap a standalone Python interpreter in a hidden `.pysh` directory.
 
