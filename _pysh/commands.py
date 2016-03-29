@@ -44,7 +44,7 @@ def dist(opts):
             with mark_task(opts, "Copying source"):
                 shell(
                     opts,
-                    "cd {root_path} && git archive HEAD | tar -x -C {build_path}",
+                    "cd {root_path} && git archive HEAD --format=tar | tar -x -C {build_path}",
                     root_path=opts.root_path,
                     build_path=build_path,
                 )

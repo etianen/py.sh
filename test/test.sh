@@ -10,7 +10,7 @@ ROOT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
 # Make a temporary local copy of the py.sh helpers.
 TMP_HELPERS_ARCHIVE=`mktemp`
 export PYSH_HELPERS_URL="file://${TMP_HELPERS_ARCHIVE}"
-(cd "${ROOT_PATH}" && git archive HEAD --prefix="export/") > "${TMP_HELPERS_ARCHIVE}"
+(cd "${ROOT_PATH}" && git archive HEAD --format="tar" --prefix="export/") > "${TMP_HELPERS_ARCHIVE}"
 trap "rm ${TMP_HELPERS_ARCHIVE}" exit
 
 clean() {
