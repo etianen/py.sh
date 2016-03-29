@@ -177,6 +177,18 @@ Probably, but I've never heard of XXX, or it didn't support all the features I w
 - Many projects already have a `package.json` file for managing nodejs dependencies.
 
 
+### Q: Haven't you just reinvented virtualenv?
+
+Not really. virtualenv is useful for managing a standalone bunch of PyPy dependencies. It doesnt help with installing Python interpreters not included in your operating system, and large binary dependencies can be a pain to install.
+
+
+### Q: Haven't you just reinvented pyenv?
+
+Not really. pyenv is useful for managing multiple Python versions in development, but it doesnt help with binary dependencies.
+
+This project is just a thin wrapper around [Miniconda](http://continuum.io/anaconda), so it hasn't really reinvented anything.
+
+
 ## Build status
 
 This project is built on every push using the Travis-CI service.
