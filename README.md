@@ -8,8 +8,8 @@ Shell script to install and manage a standalone Python interpreter and environme
 ## Features
 
 - Create per-project Python installations.
-- Configure Python version, [PyPi](https://pypi.python.org/pypi) and [Anaconda Cloud](https://anaconda.org) dependencies and post-installation scripts in a single `package.json` file.
-- Create a standalone archive of your entire project, including dependencies and Python interpreter, for offline installation on another machine of the same operating system and architecture.
+- Configure [PyPi](https://pypi.python.org/pypi) and [Anaconda Cloud](https://anaconda.org) dependencies in a single `package.json` file.
+- Create a standalone archive of your entire project for offline installation on another machine.
 - Supports a large number of 64bit Linux or OSX platforms.
 - Supports a large number of [Python versions](https://anaconda.org/anaconda/python/files).
 - Supports a large number of precompiled binary dependencies (e.g. [numpy](http://www.numpy.org/), [scipy](http://www.scipy.org/)) from [Anaconda Cloud](https://anaconda.org).
@@ -42,17 +42,17 @@ A small `py.sh` script is added to the root of your Python project. This is used
 
 4.  Add the hidden `.pysh` directory to your `.gitignore` file.
 
-**Note:** Step 1 actually generates a custom py.sh script locked to the latest version of the py.sh helper libraries on GitHub. If you ever need to upgrade py.sh, simply follow these steps again.
+**Note:** Step 1 actually generates a custom `py.sh` script, locked to the latest version of the py.sh helper libraries on GitHub. If you ever need to upgrade py.sh, simply follow these steps again.
 
-**Advanced:** Manual installation can be performed by simply copying the [py.sh](https://github.com/etianen/py.sh/blob/master/py.sh) script from GitHub into your project folder, but you'll have to manually edit the script to lock `$PYSH_HELPERS_URL` to a specific Git commit.
+**Advanced:** Manual installation can be performed by copying the [py.sh](https://github.com/etianen/py.sh/blob/master/py.sh) script into your project folder. It's recommended to manually edit the script to lock `$PYSH_HELPERS_URL` to a specific Git commit.
 
 
 ## Usage
 
-**Note:** You can learn a lot from `./py.sh --help`.
+**Note:** You can learn a lot from `./py.sh --help` and `./py.sh <command name> --help`.
 
 
-### Running a command in your standalone environment
+### Running a command in your environment
 
 Run any command with `./py.sh run <your command>`.
 
@@ -70,7 +70,7 @@ Or to install and run [flake8](https://flake8.readthedocs.org/en/latest/):
 ```
 
 
-### Activating your standalone environment
+### Activating your environment
 
 Rather than prefix every command with `./py.sh run`, you can activate your environment with `./py.sh activate`.
 
@@ -83,7 +83,7 @@ flake8 .
 ```
 
 
-### Configuring Python version and dependencies
+### Configuring your environment
 
 You can specify the Python version, along with any [Anaconda Cloud](https://anaconda.org) and [PyPi](https://pypi.python.org/pypi) dependencies, by creating a `package.json` file in the root of your project.
 
@@ -114,25 +114,28 @@ An example `package.json` file:
       }
     },
     "install": [
-      "my-post-install-command.sh"
+      "my-post-install-command.sh",
+      "python -c \"echo 'Everything installed OK'\""
     ]
   }
 }
 ```
 
-Whenever you update your `package.json` file, simply run `./py.sh install` to rebuild your environment with the specified dependencies.
+Whenever you update your `package.json` file, run `./py.sh install` to rebuild your environment with the specified dependencies.
+
+**Note:** Any commands in the `install` section will be run in your environment at the end of every `./py.sh install`.
 
 
 ### Configuring local settings
 
-If you create a `.env` file in the root of your project, it will be sourced by the shell before any `./py.sh run` commands are run, and at the start of a `./py.sh activate` session.
+If you create a `.env` script in the root of your project, it will be sourced by the shell before any `./py.sh run` commands are run, and at the start of every `./py.sh activate` session.
 
-**Note:** It's customary to use this to configure environmental variables for your project, and to exclude the `.env` file from version control.
+**Note:** It's traditional to use this to configure environmental variables for your project. You'll probably want to add the `.env` script to your `.gitignore` file.
 
 
 ### Creating a standalone archive
 
-It's possible to create a standalone archive of your entire project, including dependencies and Python interpreter, for offline installation on another machine of the same operating system and architecture.
+It's possible to create a standalone archive of your entire project, including dependencies and Python interpreter, for offline installation on another machine.
 
 ``` bash
 ./py.sh dist
@@ -145,6 +148,33 @@ unzip your-project-1.0.0.zip -d your_project
 cd your_project
 ./py.sh install --offline
 ```
+
+**Important:** Offline installers work best if all binary dependencies (e.g. [numpy](http://www.numpy.org/), [scipy](http://www.scipy.org/)) are installed from [Anaconda Cloud](https://anaconda.org). Otherwise, large binary dependencies can take an extremely long time to build during installation.
+
+
+## FAQ
+
+### Q: Why is this useful?
+
+These things are otherwise really hard to do:
+
+- Run a modern Python interpreter on an outdated version of Linux.
+- Produce offline installers for a Python project.
+- Run multiple version of Python on the same machine in production.
+
+
+### Q: Isn't this already done by XXX?
+
+Probably, but I've never heard of XXX, or it didn't support all the features I wanted.
+
+
+### Q: Why package.json? Why not the normal requirements.txt or setup.py?
+
+- Both `pip` and `conda` use completely different requirements file formats, and it's a pain to have to keep moving from one to the other.
+- It's useful to be able to specify extra dependencies for development that shouldn't be included in production builds.
+- There needs to be somewhere to specify the Python version.
+- Being able to specify post-installation steps is really useful for reproducible installs.
+- Many projects already have a `package.json` file for managing nodejs dependencies.
 
 
 ## Build status
