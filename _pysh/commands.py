@@ -94,7 +94,7 @@ def activate(opts):
     with mark_task(opts, "Activating {} environment".format(opts.conda_env)):
         shell_local_exec(
             opts,
-            """printf "done!
+            """printf "{GREEN}done!{PLAIN}
 Deactivate environment with {CYAN}exit{PLAIN} or {CYAN}[Ctl+D]{PLAIN}.
 " && export PS1="({{package_name}}) \\h:\\W \\u\\$ " && bash""".format(**STYLES),
             package_name=package_name,
