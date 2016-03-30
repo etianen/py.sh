@@ -14,7 +14,7 @@ CYAN=`printf "\e[36m"`
 PLAIN=`printf "\e[0m"`
 
 # Say hello.
-printf "Welcome to the ${BOLD}${CYAN}py.sh${PLAIN} automated installer!\n"
+printf "Welcome to the ${BOLD}${GREEN}py.sh${PLAIN} automated installer!\n"
 
 # Download the py.sh script.
 printf "Downloading py.sh script... "
@@ -45,7 +45,7 @@ ${GREEN}                   _
 | |     __/ |
 |_|    |___/
 ${PLAIN}
-${BOLD}${CYAN}py.sh${PLAIN} is now installed!
+${BOLD}py.sh${PLAIN} is now installed!
 
 A standalone Python interpreter has been installed into ${CYAN}.pysh${PLAIN}.
 ${BOLD}Recommended:${PLAIN} Add ${CYAN}.pysh${PLAIN} to your ${CYAN}.gitignore${PLAIN} file.
