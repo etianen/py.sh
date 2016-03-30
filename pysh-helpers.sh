@@ -3,11 +3,21 @@
 set -e -o pipefail
 shopt -s nullglob
 
-# Define some colors.
-RED=`printf "\e[32m"`
-GREEN=`printf "\e[32m"`
-BOLD=`printf "\e[1m"`
-PLAIN=`printf "\e[0m"`
+# Define some styles.
+if [ -t 1 ]; then
+    define-style() {
+        printf "\e[%sm\n" ${1}
+    }
+else
+    define-style() {
+        :
+    }
+fi
+
+PLAIN=`define-style "0"`
+BOLD=`define-style "1"`
+RED=`define-style "31"`
+GREEN=`define-style "32"`
 
 # Script environment.
 export PYSH_OS_NAME=`uname -s | tr '[:upper:]' '[:lower:]'`

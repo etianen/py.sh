@@ -7,11 +7,12 @@ shopt -s nullglob
 # This is an automated installer for py.sh.
 # https://github.com/etianen/py.sh
 
-# Define some colors.
-GREEN=`printf "\e[32m"`
-BOLD=`printf "\e[1m"`
-CYAN=`printf "\e[36m"`
+# Define some styles.
 PLAIN=`printf "\e[0m"`
+BOLD=`printf "\e[1m"`
+GREEN=`printf "\e[32m"`
+CYAN=`printf "\e[36m"`
+
 
 # Say hello.
 printf "Welcome to the ${BOLD}${GREEN}py.sh${PLAIN} automated installer!\n"

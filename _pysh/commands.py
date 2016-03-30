@@ -6,6 +6,7 @@ from _pysh.config import load_config
 from _pysh.constants import BUILD_DIR
 from _pysh.pip import install_pip_deps, download_pip_deps
 from _pysh.shell import shell, shell_local, shell_local_exec
+from _pysh.styles import STYLES
 from _pysh.tasks import TaskError, mark_task
 from _pysh.utils import rimraf, mkdirp
 
@@ -94,8 +95,8 @@ def activate(opts):
         shell_local_exec(
             opts,
             """printf "done!
-Deactivate environment with \033[36mexit\033[0m or \033[36m[Ctl+D]\033[0m.
-" && export PS1="(\033[32m{package_name}\033[0m) \\h:\\W \\u\\$ " && bash""",
+Deactivate environment with {CYAN}exit{PLAIN} or {CYAN}[Ctl+D]{PLAIN}.
+" && export PS1="({{package_name}}) \\h:\\W \\u\\$ " && bash""".format(**STYLES),
             package_name=package_name,
         )
 
