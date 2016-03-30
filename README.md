@@ -20,36 +20,22 @@ Install and manage a standalone Python interpreter and dependencies.
 A small `py.sh` script is added to the root of your Python project. This is used to bootstrap a standalone Python interpreter in a hidden `.pysh` directory.
 
 
-## Installation
+## Automated installation
 
-1.  Download the `py.sh` script.
+``` bash
+curl -sL https://raw.githubusercontent.com/etianen/py.sh/master/install.sh | bash
+```
 
-    ``` bash
-    curl -sL https://raw.githubusercontent.com/etianen/py.sh/master/generate.sh | bash > py.sh
-    ```
+A standalone Python interpreter will be installed into `./.pysh`.
 
-2.  Make it executable.
+**Recommended:** Add `.pysh` to your `.gitignore` file.
 
-    ``` bash
-    chmod +x py.sh
-    ```
-
-3.  Install you a Python, for great good!
-
-    ``` bash
-    ./py.sh install
-    ```
-
-4.  Add the newly-created `.pysh` directory to your `.gitignore` file.
-
-**Note:** Step 1 actually generates a custom `py.sh` script, locked to the latest version of the py.sh helper libraries on GitHub. If you ever need to upgrade py.sh, simply follow these steps again.
-
-**Advanced:** Manual installation can be performed by copying the [py.sh](https://github.com/etianen/py.sh/blob/master/py.sh) script into your project folder. It's recommended to manually edit the script to lock `$PYSH_HELPERS_URL` to a specific Git commit.
+**Advanced:** The steps performed by the automated installer are available in [install.sh](https://raw.githubusercontent.com/etianen/py.sh/master/install.sh), and can be performed manually if preferred.
 
 
 ## Usage
 
-**Note:** You can learn a lot from `./py.sh --help` and `./py.sh <command name> --help`.
+**Hint:** You can learn a lot from `./py.sh --help` and `./py.sh <command name> --help`.
 
 
 ### Running a command in your environment

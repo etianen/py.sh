@@ -57,8 +57,7 @@ def format_shell_local(opts, command, **kwargs):
     commands = []
     # Activate conda environment.
     commands.append(format_shell(
-        "source {activate_script_path} {conda_env} &> /dev/null",
-        activate_script_path=os.path.join(opts.miniconda_bin_path, "activate"),
+        "source activate {conda_env} &> /dev/null",
         conda_env=opts.conda_env,
     ))
     # Activate local env file.
