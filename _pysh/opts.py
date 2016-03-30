@@ -1,6 +1,6 @@
 import argparse
 import os
-from _pysh.commands import install, dist, activate, run
+from _pysh.commands import clean, install, dist, activate, run
 from _pysh.constants import CONFIG_PREFIX
 
 
@@ -55,6 +55,16 @@ command_parsers = parser.add_subparsers(
     title="subcommands",
     help="The command to run.",
 )
+
+
+# Clean parser.
+
+clean_parser = command_parsers.add_parser(
+    "clean",
+    help="Removes the py.sh environment.",
+)
+
+clean_parser.set_defaults(func=clean)
 
 
 # Install parser.
