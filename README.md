@@ -97,7 +97,8 @@ An example `package.json` file:
       },
       "devDependencies": {
         "flake8": "2.5.4"
-      }
+      },
+      "extra_index_urls": []
     },
     "install": [
       "my-post-install-command.sh",
@@ -153,9 +154,9 @@ These things are otherwise difficult to do:
 
 Probably, but I've never heard of XXX, or it didn't support all the features I wanted.
 
-virtualenv is useful for managing a standalone bunch of PyPy dependencies. It doesn't help with installing Python interpreters not included in your operating system, and large binary dependencies can be a pain to install.
+[virtualenv](https://virtualenv.pypa.io/en/latest/) is useful for managing a standalone bunch of PyPy dependencies. It doesn't help with installing Python interpreters not included in your operating system, and large binary dependencies can be a pain to install.
 
-pyenv is useful for managing multiple Python versions in development, but it doesn't help with binary dependencies.
+[pyenv](https://github.com/yyuu/pyenv) is useful for managing multiple Python versions in development, but it doesn't help with binary dependencies.
 
 This project is just a convenience wrapper around [Miniconda](http://continuum.io/anaconda), so it hasn't really reinvented anything.
 
