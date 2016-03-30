@@ -30,7 +30,7 @@ export PYSH_SCRIPT=`basename "${BASH_SOURCE[0]}"`
 export PYSH_LIB_DIR="lib"
 export PYSH_WORK_PATH="${PYSH_ROOT_PATH}/${PYSH_WORK_DIR}"
 export PYSH_LIB_PATH="${PYSH_WORK_PATH}/${PYSH_LIB_DIR}"
-PYSH_HELPERS_PATH="${PYSH_LIB_PATH}/helpers"
+export PYSH_HELPERS_PATH="${PYSH_LIB_PATH}/helpers"
 
 # Download py.sh helpers.
 if [ ! -d "${PYSH_HELPERS_PATH}" ]; then
