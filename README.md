@@ -22,8 +22,6 @@ A small `py.sh` script is added to the root of your Python project. This is used
 
 ## Automated installation
 
-A standalone Python interpreter will be installed into `./.pysh`.
-
 ``` bash
 curl -sL https://raw.githubusercontent.com/etianen/py.sh/master/install.sh | bash
 ```
