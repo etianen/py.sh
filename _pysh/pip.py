@@ -1,7 +1,7 @@
 import os
 from _pysh.config import get_deps
 from _pysh.constants import PACKAGES_DIR, BUILD_DIR
-from _pysh.shell import shell_local
+from _pysh.shell import format_shell, shell_local
 from _pysh.tasks import mark_task
 
 
@@ -28,7 +28,14 @@ def install_pip_deps(opts, config):
                     deps=deps,
                 )
             else:
-                shell_local(opts, "pip install {deps}", deps=deps)
+                # Handle extra index URLs.
+                index_urls = " ".join(
+                    format_shell("--extra-index-url {index_url}", index_url=index_url)
+                    for index_url
+                    in config.get("pysh").get("pip").get("index_urls", [])
+                )
+                # Run the install.
+                shell_local(opts, "pip install {index_urls} {{deps}}".format(index_urls=index_urls), deps=deps)
 
 
 def download_pip_deps(opts, config):
