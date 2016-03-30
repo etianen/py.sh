@@ -29,13 +29,17 @@ def install_pip_deps(opts, config):
                 )
             else:
                 # Handle extra index URLs.
-                index_urls = " ".join(
+                extra_index_urls = " ".join(
                     format_shell("--extra-index-url {index_url}", index_url=index_url)
                     for index_url
-                    in config.get("pysh").get("pip").get("index_urls", [])
+                    in config.get("pysh").get("pip").get("extra_index_urls", [])
                 )
                 # Run the install.
-                shell_local(opts, "pip install {index_urls} {{deps}}".format(index_urls=index_urls), deps=deps)
+                shell_local(
+                    opts,
+                    "pip install {extra_index_urls} {{deps}}".format(extra_index_urls=extra_index_urls),
+                    deps=deps,
+                )
 
 
 def download_pip_deps(opts, config):
