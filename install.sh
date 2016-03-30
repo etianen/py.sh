@@ -14,7 +14,7 @@ CYAN=`printf "\e[36m"`
 PLAIN=`printf "\e[0m"`
 
 # Say hello.
-printf "Welcome to the ${BOLD}py.sh${PLAIN} automated installer!"
+printf "Welcome to the ${BOLD}py.sh${PLAIN} automated installer!\n"
 
 # Download the py.sh script.
 printf "Downloading py.sh script... "
