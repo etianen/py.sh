@@ -3,7 +3,7 @@ from _pysh import __version__
 
 
 setup(
-    name="_pysh",
+    name="py.sh-helpers",
     version=".".join(map(str, __version__)),
     license="BSD",
     description="Helper module for py.sh.",

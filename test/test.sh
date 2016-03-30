@@ -15,7 +15,7 @@ trap "rm ${TMP_HELPERS_ARCHIVE}" exit
 
 clean() {
     rm -rf "${1}/.pysh/miniconda"
-    rm -rf "${1}/.pysh/helpers"
+    rm -rf "${1}/.pysh/lib/helpers"
 }
 
 run-test() {
@@ -31,7 +31,7 @@ assert-dep() {
     run-test "${1}" --traceback run python -c "import ${2}"
 }
 
-# Install with no package.json, and some args before the install command.
+# Install with no package.json.
 clean "${ROOT_PATH}"
 run-test "${ROOT_PATH}" --traceback install
 assert-python "${ROOT_PATH}"
@@ -39,11 +39,6 @@ assert-python "${ROOT_PATH}"
 # Run flake8
 run-test "${ROOT_PATH}" run pip install flake8
 run-test "${ROOT_PATH}" run flake8 _pysh
-
-# Install with no package.json, and no args before the install command.
-clean "${ROOT_PATH}"
-run-test "${ROOT_PATH}" install
-assert-python "${ROOT_PATH}"
 
 # Check dotenv file parsing.
 run-test "${ROOT_PATH}" --traceback --env-file="${ROOT_PATH}/test/.env" run python -c "import os; assert os.environ['TEST_ENV'] == 'foo'"
