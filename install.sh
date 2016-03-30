@@ -7,10 +7,19 @@ shopt -s nullglob
 # This is an automated installer for py.sh.
 # https://github.com/etianen/py.sh
 
+# Define some colors.
+GREEN=`printf "\e[32m"`
+BOLD=`printf "\e[1m"`
+CYAN=`printf "\e[36m"`
+PLAIN=`printf "\e[0m"`
+
+# Say hello.
+printf "Welcome to the ${BOLD}py.sh${PLAIN} automated installer!"
+
 # Download the py.sh script.
 printf "Downloading py.sh script... "
 curl --location --silent "https://raw.githubusercontent.com/etianen/py.sh/master/py.sh" > ./py.sh
-printf "done!\n"
+printf "${GREEN}done!${PLAIN}\n"
 
 # Make the script executable.
 chmod +x ./py.sh
@@ -20,14 +29,14 @@ chmod +x ./py.sh
 printf "Configuring py.sh script... "
 LATEST_GIT_COMMIT=$(git ls-remote https://github.com/etianen/py.sh.git master | awk '{print $1;}')
 sed -i '' 's/https\:\/\/github\.com\/etianen\/py\.sh\/archive\/master\.tar\.gz/https\:\/\/github.com\/etianen\/py.sh\/archive\/'"${LATEST_GIT_COMMIT}"'.tar.gz/g' ./py.sh
-printf "done!\n"
+printf "${GREEN}done!${PLAIN}\n"
 
 # Run the install command.
 ./py.sh install
 
 # Print some useful information.
 cat << EOF
-                   _
+${GREEN}                   _
                   | |
  _ __  _   _   ___| |__
 | '_ \| | | | / __| '_ \\
@@ -35,13 +44,13 @@ cat << EOF
 | .__/ \__, (_)___/_| |_|
 | |     __/ |
 |_|    |___/
+${PLAIN}
+${BOLD}py.sh${PLAIN} is now installed!
 
-py.sh is now installed!
+A standalone Python interpreter has been installed into ${CYAN}.pysh${PLAIN}.
+${BOLD}Recommended:${PLAIN} Add ${CYAN}.pysh${PLAIN} to your ${CYAN}.gitignore${PLAIN} file.
 
-A standalone Python interpreter has been installed into \`.pysh\`.
-Recommended: Add \`.pysh\` to your \`.gitignore\` file.
-
-Use \`./py.sh\` to manage your environment.
-Hint: You can learn a lot from \`./py.sh --help\` and \`./py.sh <command name> --help\`.
+Use ${CYAN}./py.sh${PLAIN} to manage your environment.
+${BOLD}Hint:${PLAIN} You can learn a lot from ${CYAN}./py.sh --help${PLAIN} and ${CYAN}./py.sh <command name> --help${PLAIN}.
 
 EOF

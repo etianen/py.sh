@@ -7,6 +7,12 @@ shopt -s nullglob
 
 ROOT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
 
+# Define some colors.
+RED=`printf "\e[32m"`
+BOLD=`printf "\e[1m"`
+CYAN=`printf "\e[36m"`
+PLAIN=`printf "\e[0m"`
+
 # Make a temporary local copy of the py.sh helpers.
 TMP_HELPERS_ARCHIVE=`mktemp`
 export PYSH_HELPERS_URL="file://${TMP_HELPERS_ARCHIVE}"
@@ -19,7 +25,7 @@ clean() {
 }
 
 run-test() {
-    echo "TEST: Running py.sh ${*:2}"
+    printf "${BOLD}${CYAN}TEST:${PLAIN} Running py.sh ${*:2}\n"
     "${1}/py.sh" "${@:2}"
 }
 
@@ -60,7 +66,7 @@ rm -rf "${DIST_PATH}"
 unzip -qq -o "${ROOT_PATH}/dist/pysh-test-0.1.0-$(uname -s | tr '[:upper:]' '[:lower:]')-amd64.zip" -d "${DIST_PATH}"
 
 # Install the standalone distribution.
-echo "NOTICE: About to perform offline tests in 10 seconds."
+printf "${BOLD}${CYAN}NOTICE:${PLAIN} About to perform offline tests in 10 seconds.\n"
 sleep 10
 run-test "${DIST_PATH}" --traceback --config-file="${DIST_PATH}/test/package.json" install --offline
 assert-python "${DIST_PATH}"
@@ -70,7 +76,7 @@ assert-dep "${DIST_PATH}" "django"
 # Test clean.
 run-test "${DIST_PATH}" clean
 if [ -d "${DIST_PATH}/.pysh" ]; then
-    echo "Clean did not remove dir!"
+    echo "${BOLD}${RED}ERROR:${PLAIN} Clean did not remove dir!"
     exit 1
 fi
 

@@ -3,6 +3,12 @@
 set -e -o pipefail
 shopt -s nullglob
 
+# Define some colors.
+RED=`printf "\e[32m"`
+GREEN=`printf "\e[32m"`
+BOLD=`printf "\e[1m"`
+PLAIN=`printf "\e[0m"`
+
 # Script environment.
 export PYSH_OS_NAME=`uname -s | tr '[:upper:]' '[:lower:]'`
 
@@ -26,7 +32,7 @@ fi
 # Runs a script silently, only outputing stderr/stdout on failure.
 run-silent() {
     if ! CMD_OUTPUT=$(eval "${@} 2>&1"); then
-        printf "ERROR!\n%s\n%s\n" "${*}" "${CMD_OUTPUT}"
+        printf "${RED}ERROR!${PLAIN}\n%s\n%s\n" "${*}" "${CMD_OUTPUT}"
         exit 1
     fi
 }
@@ -36,18 +42,18 @@ if [ ! -f "${PYSH_MINICONDA_INSTALLER_PATH}" ]; then
     # Download Miniconda.
     printf "Downloading Miniconda... "
     curl --location --silent "${PYSH_MINICONDA_INSTALLER_URL}" > "${PYSH_MINICONDA_INSTALLER_PATH}"
-    printf "done!\n"
+    printf "${GREEN}done!${PLAIN}\n"
 fi
 
 # Install Miniconda.
 if [ ! -d "${PYSH_MINICONDA_PATH}" ]; then
     printf "Installing Miniconda... "
     run-silent bash "${PYSH_MINICONDA_INSTALLER_PATH}" -b -p "${PYSH_MINICONDA_PATH}"
-    printf "done!\n"
+    printf "${GREEN}done!${PLAIN}\n"
     # Install helpers.
     printf "Installing py.sh helpers... "
     run-silent "${PYSH_MINICONDA_BIN_PATH}/pip" install --no-index --upgrade "${PYSH_HELPERS_PATH}"
-    printf "done!\n"
+    printf "${GREEN}done!${PLAIN}\n"
 fi
 
 # Delegate to Python py.sh helpers.

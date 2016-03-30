@@ -37,7 +37,7 @@ if [ ! -d "${PYSH_HELPERS_PATH}" ]; then
     printf "Downloading py.sh helpers... "
     mkdir -p "${PYSH_HELPERS_PATH}"
     curl --location --silent "${PYSH_HELPERS_URL}" | tar xz --strip-components 1 -C "${PYSH_HELPERS_PATH}"
-    printf "done!\n"
+    printf "\e[32mdone!\e[0m\n"
 fi
 
 # Delegate to the py.sh helpers.
