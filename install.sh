@@ -10,7 +10,7 @@ shopt -s nullglob
 # Download the py.sh script.
 printf "Downloading py.sh script... "
 curl --location --silent "https://raw.githubusercontent.com/etianen/py.sh/master/py.sh" > ./py.sh
-printf "done!"
+printf "done!\n"
 
 # Make the script executable.
 chmod +x ./py.sh
@@ -20,7 +20,7 @@ chmod +x ./py.sh
 printf "Configuring py.sh script..."
 LATEST_GIT_COMMIT=$(git ls-remote https://github.com/etianen/py.sh.git master | awk '{print $1;}')
 sed -i '' 's/https\:\/\/github\.com\/etianen\/py\.sh\/archive\/master\.tar\.gz/https\:\/\/github.com\/etianen\/py.sh\/archive\/'"${LATEST_GIT_COMMIT}"'.tar.gz/g' ./py.sh
-printf "done!"
+printf "done!\n"
 
 # Run the install command.
 ./py.sh install
