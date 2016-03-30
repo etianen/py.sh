@@ -94,8 +94,8 @@ def activate(opts):
         shell_local_exec(
             opts,
             """printf "done!
-Deactivate environment with \'exit\' or [Ctl+D].
-" && export PS1="({package_name}) \\h:\\W \\u\\$ " && bash""",
+Deactivate environment with \033[36mexit\033[0m or \033[36m[Ctl+D]\033[0m.
+" && export PS1="(\033[32m{package_name}\033[0m) \\h:\\W \\u\\$ " && bash""",
             package_name=package_name,
         )
 

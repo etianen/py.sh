@@ -21,7 +21,7 @@ def capture_errors(opts):
         sys.stdout.write("\033[33mWARNING!\033[0m\n")
         sys.stdout.write("* {}\n".format(ex.args[0]))
     except KeyboardInterrupt:
-        sys.stdout.write("\033[33ABORTED!\033[0m\n")
+        sys.stdout.write("\033[33mABORTED!\033[0m\n")
         sys.exit(1)
     except Exception as ex:
         sys.stdout.write("\033[31mERROR!\033[0m\n")
