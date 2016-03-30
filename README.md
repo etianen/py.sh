@@ -167,6 +167,12 @@ These things are otherwise difficult to do:
 
 Probably, but I've never heard of XXX, or it didn't support all the features I wanted.
 
+virtualenv is useful for managing a standalone bunch of PyPy dependencies. It doesn't help with installing Python interpreters not included in your operating system, and large binary dependencies can be a pain to install.
+
+pyenv is useful for managing multiple Python versions in development, but it doesn't help with binary dependencies.
+
+This project is just a convenience wrapper around [Miniconda](http://continuum.io/anaconda), so it hasn't really reinvented anything.
+
 
 ### Q: Why package.json? Why not the normal requirements.txt or setup.py?
 
@@ -175,18 +181,6 @@ Probably, but I've never heard of XXX, or it didn't support all the features I w
 - There needs to be somewhere to specify the Python version.
 - Being able to specify post-installation steps is really useful for reproducible installs.
 - Many projects already have a `package.json` file for managing nodejs dependencies.
-
-
-### Q: Haven't you just reinvented virtualenv?
-
-Not really. virtualenv is useful for managing a standalone bunch of PyPy dependencies. It doesnt help with installing Python interpreters not included in your operating system, and large binary dependencies can still be a pain to install.
-
-
-### Q: Haven't you just reinvented pyenv?
-
-Not really. pyenv is useful for managing multiple Python versions in development, but it doesnt help with binary dependencies.
-
-This project is just a thin wrapper around [Miniconda](http://continuum.io/anaconda), so it hasn't really reinvented anything.
 
 
 ## Build status
