@@ -51,4 +51,4 @@ if [ ! -d "${PYSH_MINICONDA_PATH}" ]; then
 fi
 
 # Delegate to Python py.sh helpers.
-"${PYSH_MINICONDA_BIN_PATH}/python" -m _pysh "${@}"
+exec "${PYSH_MINICONDA_BIN_PATH}/python" -m _pysh "${@}"
