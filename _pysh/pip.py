@@ -19,7 +19,7 @@ def get_pip_deps(opts, config):
 def get_pip_args(opts, config):
     pip_args = []
     # Handle extra index URLs.
-    pip_args.push(" ".join(
+    pip_args.append(" ".join(
         format_shell("--extra-index-url {index_url}", index_url=index_url)
         for index_url
         in config.get("pysh").get("pip").get("extra_index_urls", [])
