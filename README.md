@@ -10,7 +10,7 @@ Install and manage a standalone Python interpreter and dependencies.
 - Create per-project Python installations.
 - Configure [PyPi](https://pypi.python.org/pypi) and [Anaconda Cloud](https://anaconda.org) dependencies in a single `package.json` file.
 - Create a standalone archive for offline installation on another machine.
-- Supports a large number of 64bit Linux or OSX platforms.
+- Supports a large number of 64bit Linux and OSX platforms.
 - Supports a large number of [Python versions](https://anaconda.org/anaconda/python/files).
 - Supports a large number of precompiled binary dependencies (e.g. [numpy](http://www.numpy.org/), [scipy](http://www.scipy.org/)) from [Anaconda Cloud](https://anaconda.org).
 
@@ -22,15 +22,15 @@ A small `py.sh` script is added to the root of your Python project. This is used
 
 ## Automated installation
 
+A standalone Python interpreter will be installed into `./.pysh`.
+
 ``` bash
 curl -sL https://raw.githubusercontent.com/etianen/py.sh/master/install.sh | bash
 ```
 
-A standalone Python interpreter will be installed into `./.pysh`.
-
 **Recommended:** Add `.pysh` to your `.gitignore` file.
 
-**Advanced:** The steps performed by the automated installer are available in [install.sh](https://raw.githubusercontent.com/etianen/py.sh/master/install.sh), and can be performed manually if preferred.
+**Advanced:** The steps performed by the automated installer are documented in [install.sh](https://github.com/etianen/py.sh/blob/master/install.sh). You can perform them manually if preferred.
 
 
 ## Usage
