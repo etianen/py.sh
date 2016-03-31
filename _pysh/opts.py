@@ -1,13 +1,18 @@
 import argparse
 import os
-from _pysh.commands import clean, install, dist, activate, run
-from _pysh.constants import CONFIG_PREFIX
+from _pysh.commands import clean, install, download_deps, dist, activate, run
+from _pysh.config import CONFIG_PREFIX
 
 
 # The main argument parser.
 parser = argparse.ArgumentParser(
     prog=os.environ["PYSH_SCRIPT"],
     description="Install and manage a standalone Python interpreter and dependencies.",
+)
+
+command_parsers = parser.add_subparsers(
+    title="subcommands",
+    help="The command to run.",
 )
 
 parser.add_argument(
@@ -51,11 +56,6 @@ parser.set_defaults(**{
     if key.startswith(CONFIG_PREFIX)
 })
 
-command_parsers = parser.add_subparsers(
-    title="subcommands",
-    help="The command to run.",
-)
-
 
 # Clean parser.
 
@@ -79,8 +79,8 @@ install_parser.add_argument(
     default=False,
     action="store_true",
     help=(
-        "Install dependencies from a standalone archive. Implies --production. "
-        "This should only be run in an archive created using the 'dist' command."
+        "Install dependencies from an offline archive. This should only be run in an archive created using "
+        "the 'dist' command, or after running the 'download-deps' command."
     ),
 )
 
@@ -92,6 +92,23 @@ install_parser.add_argument(
 )
 
 install_parser.set_defaults(func=install)
+
+
+# Download deps command.
+
+download_deps_parser = command_parsers.add_parser(
+    "download-deps",
+    help="Download dependencies required for install --offline.",
+)
+
+download_deps_parser.add_argument(
+    "--production",
+    default=False,
+    action="store_true",
+    help="Don't download development dependencies.",
+)
+
+download_deps_parser.set_defaults(func=download_deps)
 
 
 # Dist parser.
@@ -107,7 +124,7 @@ dist_parser.add_argument(
     help="The directory name to write archive files to. Defaults to 'dist'.",
 )
 
-dist_parser.set_defaults(func=dist, production=True, conda_env="build", offline=False)
+dist_parser.set_defaults(func=dist, production=True, conda_env="build")
 
 
 # Activate command.
@@ -133,4 +150,7 @@ run_parser.set_defaults(func=run)
 # Parses the options.
 
 def parse_args(args):
-    return parser.parse_known_args(args)
+    opts, unknown_args = parser.parse_known_args(args)
+    opts.conda_lib_path = os.path.join(opts.lib_path, "conda")
+    opts.pip_lib_path = os.path.join(opts.lib_path, "pip")
+    return opts, unknown_args

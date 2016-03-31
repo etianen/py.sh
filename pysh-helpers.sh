@@ -22,11 +22,8 @@ GREEN=`define-style "32"`
 # Script environment.
 export PYSH_OS_NAME=`uname -s | tr '[:upper:]' '[:lower:]'`
 
-# Layout of the work dir.
-export PYSH_MINICONDA_DIR="miniconda"
-
 # Paths for py.sh helpers.
-export PYSH_MINICONDA_PATH="${PYSH_WORK_PATH}/${PYSH_MINICONDA_DIR}"
+export PYSH_MINICONDA_PATH="${PYSH_WORK_PATH}/miniconda"
 export PYSH_MINICONDA_BIN_PATH="${PYSH_MINICONDA_PATH}/bin"
 
 # Paths for this script.

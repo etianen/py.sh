@@ -2,7 +2,7 @@ import os
 import shlex
 import signal
 import subprocess
-from _pysh.constants import CONFIG_PREFIX
+from _pysh.config import CONFIG_PREFIX
 from _pysh.tasks import TaskError
 
 

@@ -17,9 +17,9 @@ export PYSH_HELPERS_URL=${PYSH_HELPERS_URL:="https://github.com/etianen/py.sh/ar
 # The root path of the project. Defaults to the dirname of this script.
 export PYSH_ROOT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# The directory to install py.sh into, relative to PYSH_ROOT_PATH.
+# The path to install py.sh into, which should be inside ${PYSH_ROOT_PATH}.
 # This should be excluded from source control.
-export PYSH_WORK_DIR=".pysh"
+export PYSH_WORK_PATH="${PYSH_ROOT_PATH}/.pysh"
 
 
 # BOOTSTRAP SECTION
@@ -27,9 +27,7 @@ export PYSH_WORK_DIR=".pysh"
 
 # Private configuration for py.sh helpers.
 export PYSH_SCRIPT=`basename "${BASH_SOURCE[0]}"`
-export PYSH_LIB_DIR="lib"
-export PYSH_WORK_PATH="${PYSH_ROOT_PATH}/${PYSH_WORK_DIR}"
-export PYSH_LIB_PATH="${PYSH_WORK_PATH}/${PYSH_LIB_DIR}"
+export PYSH_LIB_PATH="${PYSH_WORK_PATH}/lib"
 export PYSH_HELPERS_PATH="${PYSH_LIB_PATH}/helpers"
 
 # Download py.sh helpers.

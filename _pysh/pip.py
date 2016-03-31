@@ -1,11 +1,9 @@
+import glob
 import os
 from _pysh.config import get_deps
-from _pysh.constants import PACKAGES_DIR, BUILD_DIR
 from _pysh.shell import format_shell, shell_local
 from _pysh.tasks import mark_task
-
-
-PIP_PACKAGES_DIR = os.path.join(PACKAGES_DIR, "pip")
+from _pysh.utils import rimraf, mkdirp
 
 
 def get_pip_deps(opts, config):
@@ -32,28 +30,33 @@ def install_pip_deps(opts, config):
     deps = get_pip_deps(opts, config)
     if deps:
         with mark_task(opts, "Installing {} pip dependencies".format(opts.conda_env)):
-            if opts.offline:
-                shell_local(
-                    opts,
-                    "pip install --no-index --find-links {packages_dir} {deps}",
-                    packages_dir=os.path.join(opts.work_path, PIP_PACKAGES_DIR),
-                    deps=deps,
-                )
-            else:
-                shell_local(
-                    opts,
-                    "pip install {args} {{deps}}".format(args=get_pip_args(opts, config)),
-                    deps=deps,
-                )
+            shell_local(
+                opts,
+                "pip install {args} {{deps}}".format(args=get_pip_args(opts, config)),
+                deps=deps,
+            )
+
+
+def install_pip_deps_offline(opts, config):
+    deps = glob.glob(os.path.join(opts.pip_lib_path, "*.*"))
+    if deps:
+        with mark_task(opts, "Installing {} pip dependencies".format(opts.conda_env)):
+            shell_local(
+                opts,
+                "pip install {deps}",
+                deps=deps,
+            )
 
 
 def download_pip_deps(opts, config):
+    rimraf(opts.pip_lib_path)
+    mkdirp(opts.pip_lib_path)
     deps = get_pip_deps(opts, config)
     if deps:
         with mark_task(opts, "Downloading pip dependencies"):
             shell_local(
                 opts,
-                "pip download {args} --dest {{dest_dir}} {{deps}}".format(args=get_pip_args(opts, config)),
-                dest_dir=os.path.join(opts.work_path, BUILD_DIR, opts.work_dir, PIP_PACKAGES_DIR),
+                "pip download {args} --dest {{dest_path}} {{deps}}".format(args=get_pip_args(opts, config)),
+                dest_path=opts.pip_lib_path,
                 deps=deps,
             )
