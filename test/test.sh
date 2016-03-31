@@ -40,7 +40,6 @@ assert-dep() {
 clean "${ROOT_PATH}"
 run-test "${ROOT_PATH}" install
 assert-python "${ROOT_PATH}"
-run-test "${ROOT_PATH}" clean
 
 # Say hello.
 run-test "${ROOT_PATH}" welcome
