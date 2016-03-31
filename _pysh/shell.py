@@ -4,6 +4,7 @@ import signal
 import subprocess
 from _pysh.config import CONFIG_PREFIX
 from _pysh.tasks import TaskError
+from _pysh.styles import apply_styles
 
 
 def create_env(opts):
@@ -54,20 +55,19 @@ def shell(opts, command, **kwargs):
 
 
 def format_shell_local(opts, command, **kwargs):
-    commands = []
-    # Activate conda environment.
-    commands.append(format_shell(
-        "source activate {conda_env} &> /dev/null",
+    return format_shell(
+        apply_styles(opts, (
+            "if source activate {{conda_env}} &> /dev/null ; then "
+            "test -f {{env_file_path}} && source {{env_file_path}} ; "
+            "{{{{command}}}} ; "
+            "else "
+            "printf \"{error}ERROR!{plain}\\nRun ./{{script_name}} install before attempting other commands.\\n\" ; "
+            "fi"
+        )),
         conda_env=opts.conda_env,
-    ))
-    # Activate local env file.
-    env_file_path = os.path.join(opts.root_path, opts.env_file)
-    if os.path.exists(env_file_path):
-        commands.append(format_shell("source {env_file_path}", env_file_path=env_file_path))
-    # Run the command.
-    commands.append(format_shell(command, **kwargs))
-    # All done!
-    return " && ".join(commands)
+        env_file_path=os.path.join(opts.root_path, opts.env_file),
+        script_name=opts.script_name,
+    ).format(command=format_shell(command, **kwargs))
 
 
 def shell_local(opts, command, **kwargs):
