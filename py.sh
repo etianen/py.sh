@@ -4,29 +4,14 @@ set -e -o pipefail
 shopt -s nullglob
 
 
-# This is a configuration/bootstrap file for py.sh.
+# This is a bootstrap file for py.sh.
 # https://github.com/etianen/py.sh
 
-
-# CONFIGURATION SECTION
-# Modify these settings to suit your environment.
-
-# URL to py.sh helpers. This should be locked to a specific commit.
-export PYSH_HELPERS_URL=${PYSH_HELPERS_URL:="https://github.com/etianen/py.sh/archive/master.tar.gz"}
-
-# The root path of the project. Defaults to the dirname of this script.
-export PYSH_ROOT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
-# The path to install py.sh into, which should be inside ${PYSH_ROOT_PATH}.
-# This should be excluded from source control.
-export PYSH_WORK_PATH="${PYSH_ROOT_PATH}/.pysh"
-
-
-# BOOTSTRAP SECTION
-# This should be left as-is.
-
 # Private configuration for py.sh helpers.
+export PYSH_HELPERS_URL=${PYSH_HELPERS_URL:="https://github.com/etianen/py.sh/archive/master.tar.gz"}
+export PYSH_ROOT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export PYSH_SCRIPT_NAME=`basename "${BASH_SOURCE[0]}"`
+export PYSH_WORK_PATH="${PYSH_ROOT_PATH}/.pysh"
 export PYSH_LIB_PATH="${PYSH_WORK_PATH}/lib"
 export PYSH_HELPERS_PATH="${PYSH_LIB_PATH}/helpers"
 
