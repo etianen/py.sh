@@ -25,7 +25,7 @@ def capture_errors(opts):
         sys.stdout.write(apply_styles(opts, "{warn}ABORTED!{plain}\n"))
         sys.exit(1)
     except Exception as ex:
-        sys.stdout.write(apply_styles("{error}ERROR!{plain}\n"))
+        sys.stdout.write(apply_styles(opts, "{error}ERROR!{plain}\n"))
         sys.stdout.write("{}\n".format(ex.args[0] if isinstance(ex, TaskError) else "Unexpected error."))
         if opts.traceback:
             traceback.print_exc(file=sys.stdout)
