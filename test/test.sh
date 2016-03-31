@@ -40,6 +40,7 @@ assert-dep() {
 clean "${ROOT_PATH}"
 run-test "${ROOT_PATH}" install
 assert-python "${ROOT_PATH}"
+run-test "${ROOT_PATH}" clean
 
 # Say hello.
 run-test "${ROOT_PATH}" welcome
@@ -71,6 +72,7 @@ unzip -qq -o "${ROOT_PATH}/dist/pysh-test-0.1.0-$(uname -s | tr '[:upper:]' '[:l
 run-test "${ROOT_PATH}" --config-file="${ROOT_PATH}/test/package.json" download-deps
 
 printf "${PYSH_STYLE_CODE}NOTICE:${PYSH_STYLE_PLAIN} About to perform offline tests in 10 seconds.\n"
+sleep 10
 
 # Install the offline packages.
 clean "${ROOT_PATH}"
@@ -82,18 +84,10 @@ assert-dep "${ROOT_PATH}" "django"
 assert-dep "${ROOT_PATH}" "flake8"
 
 # Install the standalone distribution.
-sleep 10
 run-test "${DIST_PATH}" --config-file="${DIST_PATH}/test/package.json" install --offline
 assert-python "${DIST_PATH}"
 assert-dep "${DIST_PATH}" "psycopg2"
 assert-dep "${DIST_PATH}" "django"
-
-# Test clean.
-run-test "${DIST_PATH}" clean
-if [ -d "${DIST_PATH}/.pysh" ]; then
-    echo "${PYSH_STYLE_ERROR}ERROR:${PYSH_STYLE_PLAIN} Clean did not remove dir!"
-    exit 1
-fi
 
 # Cleanup.
 rm -rf "${DIST_PATH}"

@@ -21,12 +21,6 @@ def prevent_unknown(func):
 
 
 @prevent_unknown
-def clean(opts):
-    with mark_task(opts, "Cleaning"):
-        rimraf(opts.work_path)
-
-
-@prevent_unknown
 def install(opts):
     config = load_config(opts)
     if opts.offline:
