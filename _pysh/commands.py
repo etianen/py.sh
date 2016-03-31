@@ -125,15 +125,15 @@ def run(opts, unknown_args):
 @prevent_unknown
 def welcome(opts):
     sys.stdout.write(apply_styles(opts, r'''{success}                   _
-                  | |
- _ __  _   _   ___| |__
-| '_ \| | | | / __| '_ \
-| |_) | |_| |_\__ \ | | |
-| .__/ \__, (_)___/_| |_|
-| |     __/ |
-|_|    |___/
+{success}                  | |
+{success} _ __  _   _   ___| |__
+{success}| '_ \| | | | / __| '_ \
+{success}| |_) | |_| |_\__ \ | | |
+{success}| .__/ \__, (_)___/_| |_|
+{success}| |     __/ |
+{success}|_|    |___/
 
-py.sh{plain} is now installed!
+{success}py.sh{plain} is now installed!
 
 A standalone Python interpreter has been installed into {code}{{work_dir}}{plain}.
 {success}Recommended:{plain} Add {code}{{work_dir}}{plain} to your {code}.gitignore{plain} file.
