@@ -141,6 +141,7 @@ A standalone Python interpreter has been installed into {code}{{work_dir}}{plain
 Use {code}./{{script_name}}{plain} to manage your environment.
 {success}Hint:{plain} You can learn a lot from {code}./{{script_name}} --help{plain}
 and {code}./{{script_name}} <command name> --help{plain}.
+
 ''').format(
         work_dir=os.path.relpath(opts.work_path, opts.root_path),
         script_name=opts.script_name,
