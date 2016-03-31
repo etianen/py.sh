@@ -35,23 +35,5 @@ printf "${GREEN}done!${PLAIN}\n"
 # Run the install command.
 ./py.sh install
 
-# Print some useful information.
-cat << EOF
-${GREEN}                   _
-                  | |
- _ __  _   _   ___| |__
-| '_ \| | | | / __| '_ \\
-| |_) | |_| |_\__ \ | | |
-| .__/ \__, (_)___/_| |_|
-| |     __/ |
-|_|    |___/
-${PLAIN}
-${BOLD}py.sh${PLAIN} is now installed!
-
-A standalone Python interpreter has been installed into ${CYAN}.pysh${PLAIN}.
-${BOLD}Recommended:${PLAIN} Add ${CYAN}.pysh${PLAIN} to your ${CYAN}.gitignore${PLAIN} file.
-
-Use ${CYAN}./py.sh${PLAIN} to manage your environment.
-${BOLD}Hint:${PLAIN} You can learn a lot from ${CYAN}./py.sh --help${PLAIN} and ${CYAN}./py.sh <command name> --help${PLAIN}.
-
-EOF
+# Say hello.
+./py.sh welcome

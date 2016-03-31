@@ -1,6 +1,6 @@
 import argparse
 import os
-from _pysh.commands import clean, install, download_deps, dist, activate, run
+from _pysh.commands import clean, install, download_deps, dist, activate, run, welcome
 from _pysh.config import CONFIG_PREFIX
 
 
@@ -145,6 +145,16 @@ run_parser = command_parsers.add_parser(
 )
 
 run_parser.set_defaults(func=run)
+
+
+# Welcome command.
+
+welcome_parser = command_parsers.add_parser(
+    "welcome",
+    help="Prints a cute welcome message.",
+)
+
+welcome_parser.set_defaults(func=welcome)
 
 
 # Parses the options.

@@ -44,6 +44,9 @@ clean "${ROOT_PATH}"
 run-test "${ROOT_PATH}" install
 assert-python "${ROOT_PATH}"
 
+# Say hello.
+run-test "${ROOT_PATH}" welcome
+
 # Run flake8
 run-test "${ROOT_PATH}" run pip install flake8
 run-test "${ROOT_PATH}" run flake8 _pysh

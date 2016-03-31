@@ -1,6 +1,7 @@
 from functools import wraps
 import os
 import shutil
+import sys
 from _pysh.conda import delete_conda_env, reset_conda_env, reset_conda_env_offline, download_conda_deps
 from _pysh.config import load_config
 from _pysh.pip import install_pip_deps, install_pip_deps_offline, download_pip_deps
@@ -119,3 +120,25 @@ def run(opts, unknown_args):
         "{unknown_args}",
         unknown_args=unknown_args,
     )
+
+
+@prevent_unknown
+def welcome(opts):
+    sys.stdout.write(apply_styles(opts, r'''{success}                   _
+                  | |
+ _ __  _   _   ___| |__
+| '_ \| | | | / __| '_ \
+| |_) | |_| |_\__ \ | | |
+| .__/ \__, (_)___/_| |_|
+| |     __/ |
+|_|    |___/
+
+py.sh{plain} is now installed!
+
+A standalone Python interpreter has been installed into {code}.pysh{plain}.
+{success}Recommended:{plain} Add {code}.pysh{plain} to your {code}.gitignore{plain} file.
+
+Use {code}./py.sh{plain} to manage your environment.
+{success}Hint:{plain} You can learn a lot from {code}./py.sh --help{plain}
+and {code}./py.sh <command name> --help{plain}.
+'''))
