@@ -1,16 +1,11 @@
-import sys
+class StyleMapping:
+
+    def __init__(self, opts):
+        self._opts = opts
+
+    def __getitem__(self, key):
+        return getattr(self._opts, "style_{}".format(key), "").encode().decode("unicode_escape")
 
 
-def define_style(code):
-    if sys.stdout.isatty():
-        return "\033[{}m".format(code)
-    return ""
-
-
-STYLES = {
-    "PLAIN": define_style(0),
-    "RED": define_style(31),
-    "GREEN": define_style(32),
-    "YELLOW": define_style(33),
-    "CYAN": define_style(36),
-}
+def apply_styles(opts, command):
+    return command.format_map(StyleMapping(opts))

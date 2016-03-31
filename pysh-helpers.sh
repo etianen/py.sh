@@ -5,19 +5,12 @@ shopt -s nullglob
 
 # Define some styles.
 if [ -t 1 ]; then
-    define-style() {
-        printf "\e[%sm\n" ${1}
-    }
-else
-    define-style() {
-        :
-    }
+    export PYSH_STYLE_PLAIN="\033[0m"
+    export PYSH_STYLE_SUCCESS="\033[32m"
+    export PYSH_STYLE_ERROR="\033[31m"
+    export PYSH_STYLE_WARN="\033[33m"
+    export PYSH_STYLE_CODE="\033[36m"
 fi
-
-PLAIN=`define-style "0"`
-BOLD=`define-style "1"`
-RED=`define-style "31"`
-GREEN=`define-style "32"`
 
 # Script environment.
 export PYSH_OS_NAME=`uname -s | tr '[:upper:]' '[:lower:]'`
@@ -39,7 +32,7 @@ fi
 # Runs a script silently, only outputing stderr/stdout on failure.
 run-silent() {
     if ! CMD_OUTPUT=$(eval "${@} 2>&1"); then
-        printf "${RED}ERROR!${PLAIN}\n%s\n%s\n" "${*}" "${CMD_OUTPUT}"
+        printf "${PYSH_STYLE_ERROR}ERROR!${PYSH_STYLE_PLAIN}\n%s\n%s\n" "${*}" "${CMD_OUTPUT}"
         exit 1
     fi
 }
@@ -49,18 +42,18 @@ if [ ! -f "${PYSH_MINICONDA_INSTALLER_PATH}" ]; then
     # Download Miniconda.
     printf "Downloading Miniconda... "
     curl --location --silent "${PYSH_MINICONDA_INSTALLER_URL}" > "${PYSH_MINICONDA_INSTALLER_PATH}"
-    printf "${GREEN}done!${PLAIN}\n"
+    printf "${PYSH_STYLE_SUCCESS}done!${PYSH_STYLE_PLAIN}\n"
 fi
 
 # Install Miniconda.
 if [ ! -d "${PYSH_MINICONDA_PATH}" ]; then
     printf "Installing Miniconda... "
     run-silent bash "${PYSH_MINICONDA_INSTALLER_PATH}" -b -p "${PYSH_MINICONDA_PATH}"
-    printf "${GREEN}done!${PLAIN}\n"
+    printf "${PYSH_STYLE_SUCCESS}done!${PYSH_STYLE_PLAIN}\n"
     # Install helpers.
     printf "Installing py.sh helpers... "
-    run-silent "${PYSH_MINICONDA_BIN_PATH}/pip" install --no-index --upgrade "${PYSH_HELPERS_PATH}"
-    printf "${GREEN}done!${PLAIN}\n"
+    run-silent "${PYSH_MINICONDA_BIN_PATH}/pip" install --no-index --upgrade --editable "${PYSH_HELPERS_PATH}"
+    printf "${PYSH_STYLE_SUCCESS}done!${PYSH_STYLE_PLAIN}\n"
 fi
 
 # Delegate to Python py.sh helpers.

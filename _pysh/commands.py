@@ -5,7 +5,7 @@ from _pysh.conda import delete_conda_env, reset_conda_env, reset_conda_env_offli
 from _pysh.config import load_config
 from _pysh.pip import install_pip_deps, install_pip_deps_offline, download_pip_deps
 from _pysh.shell import shell, shell_local, shell_local_exec
-from _pysh.styles import STYLES
+from _pysh.styles import apply_styles
 from _pysh.tasks import TaskError, mark_task
 from _pysh.utils import rimraf, mkdirp
 
@@ -106,9 +106,9 @@ def activate(opts):
     with mark_task(opts, "Activating {} environment".format(opts.conda_env)):
         shell_local_exec(
             opts,
-            """printf "{GREEN}done!{PLAIN}
-Deactivate environment with {CYAN}exit{PLAIN} or {CYAN}[Ctl+D]{PLAIN}.
-" && export PS1="({{package_name}}) \\h:\\W \\u\\$ " && bash""".format(**STYLES),
+            apply_styles(opts, """printf "{success}done!{plain}
+Deactivate environment with {code}exit{plain} or {code}[Ctl+D]{plain}.
+" && export PS1="({code}{{package_name}}{plain}) \\h:\\W \\u\\$ " && bash"""),
             package_name=package_name,
         )
 
