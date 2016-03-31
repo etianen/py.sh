@@ -3,14 +3,10 @@
 set -e -o pipefail
 shopt -s nullglob
 
-# Define some styles.
-if [ -t 1 ]; then
-    export PYSH_STYLE_PLAIN="\033[0m"
-    export PYSH_STYLE_SUCCESS="\033[32m"
-    export PYSH_STYLE_ERROR="\033[31m"
-    export PYSH_STYLE_WARN="\033[33m"
-    export PYSH_STYLE_CODE="\033[36m"
-fi
+# Minimal shell helper script for py.sh.
+
+# Load the styles.
+source "$( dirname "${BASH_SOURCE[0]}" )/pysh-styles.sh"
 
 # Script environment.
 export PYSH_OS_NAME=`uname -s | tr '[:upper:]' '[:lower:]'`

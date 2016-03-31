@@ -1,17 +1,14 @@
 #!/bin/bash
 
-# This utility is very difficult to test. Here's at least some attempt at doing so!
-
 set -e -o pipefail
 shopt -s nullglob
 
-ROOT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
+# This utility is very difficult to test. Here's at least some attempt at doing so!
 
-# Define some colors.
-RED=`printf "\e[32m"`
-BOLD=`printf "\e[1m"`
-CYAN=`printf "\e[36m"`
-PLAIN=`printf "\e[0m"`
+# Load the styles.
+source "$( dirname "${BASH_SOURCE[0]}" )/../pysh-styles.sh"
+
+ROOT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
 
 # Make a temporary local copy of the py.sh helpers.
 TMP_HELPERS_ARCHIVE=`mktemp`
@@ -27,7 +24,7 @@ clean() {
 }
 
 run-test() {
-    printf "${BOLD}${CYAN}TEST:${PLAIN} Running py.sh ${*:2}\n"
+    printf "${PYSH_STYLE_CODE}TEST:${PYSH_STYLE_PLAIN} Running py.sh ${*:2}\n"
     "${1}/py.sh" --traceback "${@:2}"
 }
 
@@ -73,7 +70,7 @@ unzip -qq -o "${ROOT_PATH}/dist/pysh-test-0.1.0-$(uname -s | tr '[:upper:]' '[:l
 # Download offline deps.
 run-test "${ROOT_PATH}" --config-file="${ROOT_PATH}/test/package.json" download-deps
 
-printf "${BOLD}${CYAN}NOTICE:${PLAIN} About to perform offline tests in 10 seconds.\n"
+printf "${PYSH_STYLE_CODE}NOTICE:${PYSH_STYLE_PLAIN} About to perform offline tests in 10 seconds.\n"
 
 # Install the offline packages.
 clean "${ROOT_PATH}"
@@ -94,7 +91,7 @@ assert-dep "${DIST_PATH}" "django"
 # Test clean.
 run-test "${DIST_PATH}" clean
 if [ -d "${DIST_PATH}/.pysh" ]; then
-    echo "${BOLD}${RED}ERROR:${PLAIN} Clean did not remove dir!"
+    echo "${PYSH_STYLE_ERROR}ERROR:${PYSH_STYLE_PLAIN} Clean did not remove dir!"
     exit 1
 fi
 
