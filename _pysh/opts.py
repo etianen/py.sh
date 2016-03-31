@@ -6,7 +6,7 @@ from _pysh.config import CONFIG_PREFIX
 
 # The main argument parser.
 parser = argparse.ArgumentParser(
-    prog=os.environ["PYSH_SCRIPT"],
+    prog=os.environ["PYSH_SCRIPT_NAME"],
     description="Install and manage a standalone Python interpreter and dependencies.",
 )
 

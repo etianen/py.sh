@@ -135,10 +135,13 @@ def welcome(opts):
 
 py.sh{plain} is now installed!
 
-A standalone Python interpreter has been installed into {code}.pysh{plain}.
-{success}Recommended:{plain} Add {code}.pysh{plain} to your {code}.gitignore{plain} file.
+A standalone Python interpreter has been installed into {code}{{work_dir}}{plain}.
+{success}Recommended:{plain} Add {code}{{work_dir}}{plain} to your {code}.gitignore{plain} file.
 
-Use {code}./py.sh{plain} to manage your environment.
-{success}Hint:{plain} You can learn a lot from {code}./py.sh --help{plain}
-and {code}./py.sh <command name> --help{plain}.
-'''))
+Use {code}./{{script_name}}{plain} to manage your environment.
+{success}Hint:{plain} You can learn a lot from {code}./{{script_name}} --help{plain}
+and {code}./{{script_name}} <command name> --help{plain}.
+''').format(
+        work_dir=os.path.relpath(opts.work_path, opts.root_path),
+        script_name=opts.script_name,
+    ))

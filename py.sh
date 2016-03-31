@@ -26,7 +26,7 @@ export PYSH_WORK_PATH="${PYSH_ROOT_PATH}/.pysh"
 # This should be left as-is.
 
 # Private configuration for py.sh helpers.
-export PYSH_SCRIPT=`basename "${BASH_SOURCE[0]}"`
+export PYSH_SCRIPT_NAME=`basename "${BASH_SOURCE[0]}"`
 export PYSH_LIB_PATH="${PYSH_WORK_PATH}/lib"
 export PYSH_HELPERS_PATH="${PYSH_LIB_PATH}/helpers"
 
