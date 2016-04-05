@@ -103,7 +103,7 @@ def activate(opts):
             opts,
             apply_styles(opts, """printf "{success}done!{plain}
 Deactivate environment with {code}exit{plain} or {code}[Ctl+D]{plain}.
-" && export PS1="({code}{{package_name}}{plain}) \\h:\\W \\u\\$ " && bash"""),
+" && export PS1="(\[{code}\]{{package_name}}\[{plain}\]) \\h:\\W \\u\\$ " && bash"""),
             package_name=package_name,
         )
 
