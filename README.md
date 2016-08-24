@@ -113,13 +113,6 @@ Whenever you update your `package.json` file, run `./py.sh install` to rebuild y
 **Note:** Any commands in the `install` section will be run in your environment at the end of every `./py.sh install`.
 
 
-### Configuring local settings
-
-If you create a `.env` script in the root of your project, it will be sourced by the shell before any `./py.sh run` commands are run, and at the start of every `./py.sh activate` session.
-
-**Note:** It's traditional to use this to configure environmental variables for your local environment. You'll probably want to add the `.env` script to your `.gitignore` file too.
-
-
 ### Creating a standalone archive
 
 It's possible to create a standalone archive of your entire project, including dependencies and Python interpreter, for offline installation on another machine.

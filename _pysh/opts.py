@@ -1,7 +1,7 @@
 import argparse
 import os
+from _pysh.shell import CONFIG_PREFIX
 from _pysh.commands import install, download_deps, dist, activate, run, welcome
-from _pysh.config import CONFIG_PREFIX
 
 
 # The main argument parser.
@@ -22,18 +22,9 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "--config-file",
-    default="package.json",
-    help="Path to a JSON config file. Defaults to 'package.json' in the same directory as this script.",
-)
-
-parser.add_argument(
-    "--env-file",
-    default=".env",
-    help=(
-        "Path to a file that will be sourced before running any environment commands. "
-        "Defaults to '.env' file in the same directory as the script"
-    ),
+    "--environment-file",
+    default="environment.yml",
+    help="Path to a YAML dependencies file. Defaults to 'environment.yml' in the same directory as this script.",
 )
 
 parser.add_argument(
@@ -74,13 +65,6 @@ install_parser.add_argument(
     ),
 )
 
-install_parser.add_argument(
-    "--production",
-    default=False,
-    action="store_true",
-    help="Don't install development dependencies.",
-)
-
 install_parser.set_defaults(func=install)
 
 
@@ -89,13 +73,6 @@ install_parser.set_defaults(func=install)
 download_deps_parser = command_parsers.add_parser(
     "download-deps",
     help="Download dependencies required for install --offline.",
-)
-
-download_deps_parser.add_argument(
-    "--production",
-    default=False,
-    action="store_true",
-    help="Don't download development dependencies.",
 )
 
 download_deps_parser.set_defaults(func=download_deps)
@@ -109,12 +86,12 @@ dist_parser = command_parsers.add_parser(
 )
 
 dist_parser.add_argument(
-    "--dist-dir",
-    default="dist",
-    help="The directory name to write archive files to. Defaults to 'dist'.",
+    "--output",
+    default="dist/app.zip",
+    help="The output filename. Defaults to 'dist/app.zip'.",
 )
 
-dist_parser.set_defaults(func=dist, production=True, conda_env="build")
+dist_parser.set_defaults(func=dist, conda_env="build")
 
 
 # Activate command.

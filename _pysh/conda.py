@@ -1,37 +1,35 @@
 import glob
 import os
 import posixpath
-from _pysh.config import get_deps
 from _pysh.shell import shell, shell_local
-from _pysh.tasks import mark_task
+from _pysh.tasks import TaskError, mark_task
 from _pysh.utils import rimraf, mkdirp, download
 
 
 def delete_conda_env(opts):
     with mark_task(opts, "Cleaning {} environment".format(opts.conda_env)):
-        shell(opts, "conda env remove --yes --name {conda_env}", conda_env=opts.conda_env)
+        shell(opts, "conda remove --yes --name {conda_env} --all --offline", conda_env=opts.conda_env)
 
 
-def reset_conda_env(opts, config):
+def reset_conda_env(opts):
     delete_conda_env(opts)
+    # Update conda.
+    with mark_task(opts, "Updating conda"):
+        shell(opts, "conda update conda conda-env --yes")
     # Create a new env.
     with mark_task(opts, "Installing {} conda dependencies".format(opts.conda_env)):
-        python_version = config.get("pysh").get("python").get("version", "3")
-        deps = [
-            "{}={}".format(*dep)
-            for dep
-            in get_deps(opts, config, "conda")
-        ]
+        environment_file = os.path.join(opts.root_path, opts.environment_file)
+        if not os.path.exists(environment_file):
+            raise TaskError("Missing {}".format(opts.environment_file))
         shell(
             opts,
-            "conda create --yes --name {conda_env} python={python_version} {deps}",
+            "conda env create --name {conda_env} --file {environment_file}",
             conda_env=opts.conda_env,
-            python_version=python_version,
-            deps=deps,
+            environment_file=environment_file,
         )
 
 
-def reset_conda_env_offline(opts, config):
+def reset_conda_env_offline(opts):
     delete_conda_env(opts)
     # Create a new env.
     with mark_task(opts, "Installing {} conda dependencies".format(opts.conda_env)):

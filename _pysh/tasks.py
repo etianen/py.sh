@@ -9,18 +9,10 @@ class TaskError(Exception):
     pass
 
 
-class TaskWarning(Exception):
-
-    pass
-
-
 @contextmanager
 def capture_errors(opts):
     try:
         yield
-    except TaskWarning as ex:
-        sys.stdout.write(apply_styles(opts, "{warn}WARNING!{plain}\n"))
-        sys.stdout.write("* {}\n".format(ex.args[0]))
     except KeyboardInterrupt:
         sys.stdout.write(apply_styles(opts, "{warn}ABORTED!{plain}\n"))
         sys.exit(1)
