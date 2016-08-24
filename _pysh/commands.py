@@ -2,6 +2,7 @@ from functools import wraps
 import os
 import shutil
 import sys
+import zipfile
 from _pysh.conda import delete_conda_env, reset_conda_env, reset_conda_env_offline, download_conda_deps
 from _pysh.config import load_config
 from _pysh.pip import install_pip_deps, install_pip_deps_offline, download_pip_deps
@@ -82,12 +83,11 @@ def dist(opts):
             with mark_task(opts, "Creating archive {}".format(dist_file)):
                 dist_file_path = os.path.join(dist_path, dist_file)
                 rimraf(dist_file_path)
-                shell(
-                    opts,
-                    "cd {build_path} && zip -9 -qq -r {dist_file_path} './'",
-                    build_path=build_path,
-                    dist_file_path=dist_file_path,
-                )
+                with zipfile.ZipFile(dist_file_path, mode="w", compression=zipfile.ZIP_DEFLATED) as handle:
+                    for root, dirs, filenames in os.walk(build_path):
+                        for filename in filenames:
+                            abs_filename = os.path.join(root, filename)
+                            handle.write(abs_filename, os.path.relpath(abs_filename, build_path))
         finally:
             rimraf(build_path)
     finally:
