@@ -15,7 +15,7 @@ def reset_conda_env(opts):
     delete_conda_env(opts)
     # Update conda.
     with mark_task(opts, "Updating conda"):
-        shell(opts, "conda update conda conda-env --yes")
+        shell(opts, "conda update conda --yes")
     # Create a new env.
     with mark_task(opts, "Installing {} conda dependencies".format(opts.conda_env)):
         requirements_files = [os.path.join(opts.root_path, opts.requirements_conda_file)]
