@@ -1,7 +1,7 @@
 import argparse
 import os
 from _pysh.shell import CONFIG_PREFIX
-from _pysh.commands import install, download_deps, dist, activate, run, welcome
+from _pysh.commands import install, dist, activate, run, welcome
 
 
 # The main argument parser.
@@ -22,9 +22,27 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "--environment-file",
-    default="environment.yml",
-    help="Path to a YAML dependencies file. Defaults to 'environment.yml' in the same directory as this script.",
+    "--requirements-conda-file",
+    default="requirements-conda.txt",
+    help="Path to a conda dependencies file. Defaults to 'requirements-conda.txt'.",
+)
+
+parser.add_argument(
+    "--requirements-conda-dev-file",
+    default="requirements-conda-dev.txt",
+    help="Path to a conda dev dependencies file. Defaults to 'requirements-conda-dev.txt'.",
+)
+
+parser.add_argument(
+    "--requirements-file",
+    default="requirements.txt",
+    help="Path to a pip dependencies file. Defaults to 'requirements.txt'.",
+)
+
+parser.add_argument(
+    "--requirements-dev-file",
+    default="requirements-dev.txt",
+    help="Path to a pip dev dependencies file. Defaults to 'requirements-dev.txt'.",
 )
 
 parser.add_argument(
@@ -61,21 +79,18 @@ install_parser.add_argument(
     action="store_true",
     help=(
         "Install dependencies from an offline archive. This should only be run in an archive created using "
-        "the 'dist' command, or after running the 'download-deps' command."
+        "the 'dist' command."
     ),
 )
 
-install_parser.set_defaults(func=install)
-
-
-# Download deps command.
-
-download_deps_parser = command_parsers.add_parser(
-    "download-deps",
-    help="Download dependencies required for install --offline.",
+install_parser.add_argument(
+    "--production",
+    default=False,
+    action="store_true",
+    help="Don't install development dependencies.",
 )
 
-download_deps_parser.set_defaults(func=download_deps)
+install_parser.set_defaults(func=install)
 
 
 # Dist parser.
@@ -91,7 +106,7 @@ dist_parser.add_argument(
     help="The output filename. Defaults to 'dist/app.zip'.",
 )
 
-dist_parser.set_defaults(func=dist, conda_env="build")
+dist_parser.set_defaults(func=dist, production=True, conda_env="build")
 
 
 # Activate command.
@@ -128,6 +143,6 @@ welcome_parser.set_defaults(func=welcome)
 
 def parse_args(args):
     opts, unknown_args = parser.parse_known_args(args)
-    opts.conda_lib_path = os.path.join(opts.lib_path, "conda")
-    opts.pip_lib_path = os.path.join(opts.lib_path, "pip")
+    opts.build_path = os.path.join(opts.work_path, "build")
+    opts.build_lib_path = os.path.join(opts.build_path, os.path.relpath(opts.lib_path, opts.root_path))
     return opts, unknown_args

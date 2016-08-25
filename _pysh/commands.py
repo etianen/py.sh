@@ -4,7 +4,7 @@ import shutil
 import sys
 import zipfile
 from _pysh.conda import delete_conda_env, reset_conda_env, reset_conda_env_offline, download_conda_deps
-from _pysh.pip import install_pip_deps_offline, download_pip_deps
+from _pysh.pip import install_pip_deps, install_pip_deps_offline, download_pip_deps
 from _pysh.shell import shell, shell_local_exec
 from _pysh.styles import apply_styles
 from _pysh.tasks import TaskError, mark_task
@@ -27,12 +27,7 @@ def install(opts):
         install_pip_deps_offline(opts)
     else:
         reset_conda_env(opts)
-
-
-@prevent_unknown
-def download_deps(opts):
-    download_conda_deps(opts)
-    download_pip_deps(opts)
+        install_pip_deps(opts)
 
 
 @prevent_unknown
@@ -40,9 +35,8 @@ def dist(opts):
     reset_conda_env(opts)
     try:
         # Create a build environment.
-        build_path = os.path.join(opts.work_path, "build")
-        rimraf(build_path)
-        mkdirp(build_path)
+        rimraf(opts.build_path)
+        mkdirp(opts.build_path)
         try:
             # Copy source.
             with mark_task(opts, "Copying source"):
@@ -50,29 +44,26 @@ def dist(opts):
                     opts,
                     "cd {root_path} && git archive HEAD --format=tar | tar -x -C {build_path}",
                     root_path=opts.root_path,
-                    build_path=build_path,
+                    build_path=opts.build_path,
                 )
+            # Copy libs.
+            with mark_task(opts, "Copying libs"):
+                shutil.copytree(opts.lib_path, opts.build_lib_path)
             # Download deps.
             download_conda_deps(opts)
             download_pip_deps(opts)
-            # Copy libs.
-            with mark_task(opts, "Copying libs"):
-                shutil.copytree(
-                    opts.lib_path,
-                    os.path.join(build_path, os.path.relpath(opts.lib_path, opts.root_path)),
-                )
             # Compress the build.
             output_path = os.path.join(opts.root_path, opts.output)
             with mark_task(opts, "Creating archive {}".format(opts.output)):
                 mkdirp(os.path.dirname(output_path))
                 rimraf(output_path)
                 with zipfile.ZipFile(output_path, mode="w", compression=zipfile.ZIP_DEFLATED) as handle:
-                    for root, dirs, filenames in os.walk(build_path):
+                    for root, dirs, filenames in os.walk(opts.build_path):
                         for filename in filenames:
                             abs_filename = os.path.join(root, filename)
-                            handle.write(abs_filename, os.path.relpath(abs_filename, build_path))
+                            handle.write(abs_filename, os.path.relpath(abs_filename, opts.build_path))
         finally:
-            rimraf(build_path)
+            rimraf(opts.build_path)
     finally:
         delete_conda_env(opts)
 

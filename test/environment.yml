@@ -1,5 +1,0 @@
-dependencies:
-- python=3.5.2
-- psycopg2=2.6.1
-- pip:
-  - django==1.10

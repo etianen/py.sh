@@ -8,8 +8,7 @@ Install and manage a standalone Python interpreter and dependencies.
 ## Features
 
 - Create per-project Python installations.
-- Configure [PyPi](https://pypi.python.org/pypi) and [Anaconda Cloud](https://anaconda.org) dependencies in a single `package.json` file.
-- Create a standalone archive for offline installation on another machine.
+- Create a standalone project archive for offline installation on another machine.
 - Supports a large number of 64bit Linux and OSX platforms.
 - Supports a large number of [Python versions](https://anaconda.org/anaconda/python/files).
 - Supports a large number of precompiled binary dependencies (e.g. [numpy](http://www.numpy.org/), [scipy](http://www.scipy.org/)) from [Anaconda Cloud](https://anaconda.org).
@@ -69,48 +68,36 @@ flake8 .
 ```
 
 
-### Configuring your environment
+### Specifying dependencies
 
-You can specify the Python version, along with any [Anaconda Cloud](https://anaconda.org) and [PyPi](https://pypi.python.org/pypi) dependencies, by creating a `package.json` file in the root of your project.
+Create a `requirements.txt` file in the root of your project.
 
-An example `package.json` file:
-
-``` json
-{
-  "name": "awesome-package",
-  "version": "0.1.0",
-  "pysh": {
-    "python": {
-      "version": "3.5"
-    },
-    "conda": {
-      "dependencies": {
-        "psycopg2": "2.6.1"
-      },
-      "devDependencies": {
-        "pytest": "2.8.5"
-      }
-    },
-    "pip": {
-      "dependencies": {
-        "django": "1.9.2"
-      },
-      "devDependencies": {
-        "flake8": "2.5.4"
-      },
-      "extra_index_urls": []
-    },
-    "install": [
-      "my-post-install-command.sh",
-      "python -c \"echo 'Everything installed OK'\""
-    ]
-  }
-}
+```
+django==1.10
 ```
 
-Whenever you update your `package.json` file, run `./py.sh install` to rebuild your environment with the specified dependencies.
+**Note:** Whenever you update your `requirements.txt` file, run `./py.sh install` to rebuild your environment with the specified dependencies.
 
-**Note:** Any commands in the `install` section will be run in your environment at the end of every `./py.sh install`.
+
+### Specifying dev dependencies
+
+Create a `requirements-dev.txt` file in the root of your project.
+
+Development dependencies will not be installed when using the `--production` flag to `./py.sh install`, and will not be included in the bundle created by `./py.sh dist`.
+
+
+### Specifying conda dependencies
+
+Create a `requirements-conda.txt` file in the root of your project. Packages will be installed from [Anaconda Cloud](https://anaconda.org).
+
+Large binary packages (e.g. `numpy`, `scipy`) will be pre-compiled for your operating system and install considerably faster than installing via `pip`.
+
+```
+python=3.5.2
+psycopg2=2.6.2
+```
+
+**Hint:** Specify conda dependencies that should only be installed during development by creating a `requirements-conda-dev.txt` file in the root of your project.
 
 
 ### Creating a standalone archive
@@ -118,13 +105,13 @@ Whenever you update your `package.json` file, run `./py.sh install` to rebuild y
 It's possible to create a standalone archive of your entire project, including dependencies and Python interpreter, for offline installation on another machine.
 
 ``` bash
-./py.sh dist
+./py.sh dist --output dist/your-project-1.0.0-linux-amd64.zip
 ```
 
 You will find a zip archive in the `./dist` folder of your project. Copy this to another machine of the same operating system and architecture, then unzip and install your project.
 
 ``` bash
-unzip your-project-1.0.0.zip -d your_project
+unzip your-project-1.0.0-linux-amd64.zip -d your_project
 cd your_project
 ./py.sh install --offline
 ```
@@ -152,15 +139,6 @@ Probably, but I've never heard of XXX, or it didn't support all the features I w
 [pyenv](https://github.com/yyuu/pyenv) is useful for managing multiple Python versions in development, but it doesn't help with binary dependencies.
 
 This project is just a convenience wrapper around [Miniconda](http://continuum.io/anaconda), so it hasn't really reinvented anything.
-
-
-### Q: Why package.json? Why not the normal requirements.txt or setup.py?
-
-- Both `pip` and `conda` use completely different requirements file formats, and it's a pain to have to keep moving from one to the other.
-- It's useful to be able to specify extra dependencies for development that shouldn't be included in production builds.
-- There needs to be somewhere to specify the Python version.
-- Being able to specify post-installation steps is really useful for reproducible installs.
-- Many projects already have a `package.json` file for managing nodejs dependencies.
 
 
 ## Build status
