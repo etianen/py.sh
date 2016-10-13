@@ -43,7 +43,7 @@ def install_pip_deps_offline(opts, config):
         with mark_task(opts, "Installing {} pip dependencies".format(opts.conda_env)):
             shell_local(
                 opts,
-                "pip install {deps}",
+                "pip install --no-index --no-deps {deps}",
                 deps=deps,
             )
 
