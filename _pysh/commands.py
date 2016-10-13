@@ -1,5 +1,7 @@
 from functools import wraps
+import fnmatch
 import os
+import re
 import shutil
 import sys
 import zipfile
@@ -34,6 +36,36 @@ def install(opts):
 def dist(opts):
     reset_conda_env(opts)
     try:
+        # Process the .pyshignore file.
+        ignore_path = os.path.join(opts.root_path, opts.ignore_file)
+        ignore_patterns = set([
+            ".DS_Store",
+            ".git",
+            ".hg",
+            ".svn",
+            "CVS",
+            "node_modules",
+        ])
+        if os.path.exists(ignore_path):
+            with mark_task(opts, "Parsing ignore file"):
+                with open(ignore_path, "rb") as ignore_handle:
+                    for line in ignore_handle.read().decode("utf-8").splitlines():
+                        line = line.strip()
+                        if line and not line.startswith("#"):
+                            ignore_patterns.add(line)
+        ignore_patterns = list(map(re.compile, map(fnmatch.translate, ignore_patterns)))
+        # Create the zipfile.
+        mkdirp(os.path.dirname(output_path))
+        rimraf(output_path)
+        with zipfile.ZipFile(output_path, mode="w", compression=zipfile.ZIP_DEFLATED) as handle:
+            # Copy source.
+            with mark_task(opts, "Copying source"):
+                for root, dirs, filenames in os.walk(opts.root_path):
+                    for filename in filenames:
+                        abs_filename = os.path.join(root, filename)
+                        handle.write(abs_filename, os.path.relpath(abs_filename, opts.root_path))
+
+
         # Create a build environment.
         rimraf(opts.build_path)
         mkdirp(opts.build_path)
@@ -55,13 +87,9 @@ def dist(opts):
             # Compress the build.
             output_path = os.path.join(opts.root_path, opts.output)
             with mark_task(opts, "Creating archive {}".format(opts.output)):
-                mkdirp(os.path.dirname(output_path))
-                rimraf(output_path)
-                with zipfile.ZipFile(output_path, mode="w", compression=zipfile.ZIP_DEFLATED) as handle:
-                    for root, dirs, filenames in os.walk(opts.build_path):
-                        for filename in filenames:
-                            abs_filename = os.path.join(root, filename)
-                            handle.write(abs_filename, os.path.relpath(abs_filename, opts.build_path))
+
+
+
         finally:
             rimraf(opts.build_path)
     finally:

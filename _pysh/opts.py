@@ -22,6 +22,12 @@ parser.add_argument(
 )
 
 parser.add_argument(
+    "--ignore-file",
+    default=".pyshignore",
+    help="Path to a py.sh ignore file. Defaults to '.pyshignore'.",
+)
+
+parser.add_argument(
     "--requirements-conda-file",
     default="requirements-conda.txt",
     help="Path to a conda dependencies file. Defaults to 'requirements-conda.txt'.",
